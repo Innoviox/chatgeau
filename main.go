@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
 
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/light"
@@ -15,20 +17,25 @@ type Game struct {
 
 func addModel(app *application.Application, path string) error {
 	dec, err := obj.Decode("resources/models/"+path+".obj", "")
-
-	if err != nil {
-		return err
-	}
+	if err != nil { return err }
 
 	group, err := dec.NewGroup()
-
-	if err != nil {
-		return err
-	}
+	if err != nil { return err }
 
 	app.Scene().Add(group)
 
 	return nil
+}
+
+func loadLevel(app *application.Application, path string) error {
+	dat, err := ioutil.ReadFile(path)
+	if err != nil { return err }
+
+	for i, row := range strings.Split(string(dat), "\n") {
+		for j, char := range row {
+			
+		}
+	}
 }
 
 func main() {
@@ -49,7 +56,9 @@ func main() {
 	axis := graphic.NewAxisHelper(0.5)
 	app.Scene().Add(axis)
 
-	fmt.Println(addModel(app, "enemy_ufoYellowWeapon"))
+	if err := loadLevel("forest") {
+		fmt.Println(err)
+	}
 
 	app.CameraPersp().SetPosition(0, 0, 3)
 	app.Run()
