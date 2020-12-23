@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/light"
-	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/util/application"
 )
+
+type Game struct {
+}
 
 func main() {
 
@@ -16,12 +17,6 @@ func main() {
 		Width:  800,
 		Height: 600,
 	})
-
-	// Create a blue torus and add it to the scene
-	geom := geometry.NewTorus(1, .4, 12, 32, math32.Pi*2)
-	mat := material.NewPhong(math32.NewColor("DarkBlue"))
-	torusMesh := graphic.NewMesh(geom, mat)
-	app.Scene().Add(torusMesh)
 
 	// Add lights to the scene
 	ambientLight := light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8)
