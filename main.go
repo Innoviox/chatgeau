@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/light"
+	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/util/application"
 )
@@ -10,8 +13,25 @@ import (
 type Game struct {
 }
 
-func main() {
+func addModel(app *application.Application, path string) error {
+	dec, err := obj.Decode("resources/models/"+path+".obj", "")
 
+	if err != nil {
+		return err
+	}
+
+	group, err := dec.NewGroup()
+
+	if err != nil {
+		return err
+	}
+
+	app.Scene().Add(group)
+
+	return nil
+}
+
+func main() {
 	app, _ := application.Create(application.Options{
 		Title:  "Hello G3N",
 		Width:  800,
@@ -28,6 +48,8 @@ func main() {
 	// Add an axis helper to the scene
 	axis := graphic.NewAxisHelper(0.5)
 	app.Scene().Add(axis)
+
+	fmt.Println(addModel(app, "enemy_ufoYellowWeapon"))
 
 	app.CameraPersp().SetPosition(0, 0, 3)
 	app.Run()
