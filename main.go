@@ -73,10 +73,7 @@ func (g *Game) loadLevel(path string) error {
 		return err
 	}
 
-	pointLight := light.NewPoint(&math32.Color{1, 1, 1}, 10.0)
-
 	for i, row := range strings.Split(string(dat), "\n") {
-		fmt.Println(row)
 		for j, char := range row {
 			sq := Square {float32(i), float32(j)}
 			roty := float32(0)
@@ -91,19 +88,12 @@ func (g *Game) loadLevel(path string) error {
 			}
 
 			m := loadModel(models[char])
-
-			g.scene.Add(m)
-			fmt.Println(i, j)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, roty, 0)
 
-			// position light above center of level
-			// update inside loop to not recalculate level size
-			pointLight.SetPosition(float32(i) / 2, 10, float32(j) / 2)
+			g.scene.Add(m)
 		}
 	}
-
-	//g.scene.Add(pointLight)
 
 	return nil
 }
