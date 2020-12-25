@@ -100,18 +100,18 @@ func (g *Game) loadLevel(path string) error {
 }
 
 func (g *Game) path() (keyframes, values math32.ArrayF32) {
-	//keyframes = math32.NewArrayF32(0, 1)
-	//keyframes.Append(0)
+	keyframes = math32.NewArrayF32(0, 2)
+	keyframes.Append(0, 6)
+
+	values = math32.NewArrayF32(0, 6)
+	values.AppendVector3(g.spawn.toVec(), g.end.toVec())
+
+
+	//keyframes = math32.NewArrayF32(0, 3)
+	//keyframes.Append(0, 2, 4, 6)
 	//
-	//values = math32.NewArrayF32(0, 3)
-	//values.AppendVector3(g.end.toVec())
-
-
-	keyframes = math32.NewArrayF32(0, 3)
-	keyframes.Append(0, 2, 4, 6)
-
-	values = math32.NewArrayF32(0, 9)
-	values.AppendVector3(&math32.Vector3{0,0,0}, &math32.Vector3{1,0,0}, &math32.Vector3{1,1,0}, &math32.Vector3{0,0,0})
+	//values = math32.NewArrayF32(0, 9)
+	//values.AppendVector3(&math32.Vector3{0,0,0}, &math32.Vector3{1,0,0}, &math32.Vector3{1,1,0}, &math32.Vector3{0,0,0})
 
 
 	return
@@ -155,9 +155,6 @@ func main() {
 
 	// initialize game
 	g := Game { app: app, anim: animation.NewAnimation(), scene: scene, cam: cam }
-
-	g.anim.SetLoop(true)
-	g.anim.SetPaused(false)
 
 	// set up level
 	if err := g.loadLevel("forest"); err != nil {
