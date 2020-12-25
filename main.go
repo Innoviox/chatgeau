@@ -31,6 +31,7 @@ type Game struct {
 var models = map[rune]string{
 	'S': "tile_endRoundSpawn",
 	'-': "tile_straight",
+	'E': "tile_endSpawn",
 }
 
 func loadModel(path string) *core.Node {
@@ -59,14 +60,21 @@ func (g *Game) loadLevel(path string) error {
 
 	for i, row := range strings.Split(string(dat), "\n") {
 		for j, char := range row {
-			if char == 'S' { // todo make switch statement
-				g.spawn = Square {float32(i), float32(j)}
+			sq := Square {float32(i), float32(j)}
+			roty := float32(0)
+
+			switch char {
+			case 'S': g.spawn = sq
+			case 'E':
+				g.end   = sq
+				roty = math.Pi
 			}
 
 			m := loadModel(models[char])
 
 			g.app.Scene().Add(m)
 			m.SetPosition(float32(i), 0, float32(j))
+			m.SetRotation(0, roty, 0)
 
 			// position light above center of level
 			// update inside loop to not recalculate level size
