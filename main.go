@@ -44,9 +44,9 @@ var models = map[rune]string{
 	'S': "tile_endRoundSpawn",
 	'E': "tile_endSpawn",
 
-	'─': "tile_straight",
-	'┐': "tile_cornerSquare",
-	'└': "tile_cornerSquare",
+	'-': "tile_straight",
+	'1': "tile_cornerSquare",
+	'2': "tile_cornerSquare",
 
 	'.': "tile", // todo add crystal decor
 }
@@ -76,6 +76,7 @@ func (g *Game) loadLevel(path string) error {
 	pointLight := light.NewPoint(&math32.Color{1, 1, 1}, 10.0)
 
 	for i, row := range strings.Split(string(dat), "\n") {
+		fmt.Println(row)
 		for j, char := range row {
 			sq := Square {float32(i), float32(j)}
 			roty := float32(0)
@@ -85,11 +86,14 @@ func (g *Game) loadLevel(path string) error {
 			case 'E':
 				g.end   = sq
 				roty = math.Pi
+			case '1': roty = math.Pi / 2
+			case '2': roty = 3 * math.Pi / 2
 			}
 
 			m := loadModel(models[char])
 
 			g.scene.Add(m)
+			fmt.Println(i, j)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, roty, 0)
 
