@@ -2,18 +2,22 @@ package main
 
 import (
 	"fmt"
+	"github.com/g3n/engine/camera"
+	"github.com/g3n/engine/gls"
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/material"
+	"github.com/g3n/engine/renderer"
 	"io/ioutil"
 	"math"
 	"strings"
+	"time"
 
 	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/light"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
-	"github.com/g3n/engine/util/application"
+	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/animation"
 )
 
@@ -23,12 +27,14 @@ type Square struct {
 }
 
 func (s Square) toVec() *math32.Vector3 {
-	return &math32.Vector3 { s.x, 0.2, s.y }
+	return &math32.Vector3 { s.x, 0.5, s.y }
 }
 
 type Game struct {
-	app   *application.Application
+	app   *app.Application
 	anim  *animation.Animation
+	scene *core.Node
+	cam   *camera.Camera
 
 	spawn Square
 	end   Square
@@ -78,7 +84,7 @@ func (g *Game) loadLevel(path string) error {
 
 			m := loadModel(models[char])
 
-			g.app.Scene().Add(m)
+			g.scene.Add(m)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, roty, 0)
 
@@ -88,7 +94,7 @@ func (g *Game) loadLevel(path string) error {
 		}
 	}
 
-	g.app.Scene().Add(pointLight)
+	g.scene.Add(pointLight)
 
 	return nil
 }
@@ -104,11 +110,11 @@ func (g *Game) path() (keyframes, values math32.ArrayF32) {
 }
 
 func (g *Game) spawnEnemy() {
-	geom := geometry.NewSphere(0.2, 10, 10, 0, math.Pi*2, 0, math.Pi)
+	geom := geometry.NewSphere(0.2, 10, 10)
 	mat := material.NewStandard(math32.NewColor("DarkBlue"))
 	mesh := graphic.NewMesh(geom, mat)
 
-	mesh.SetPosition(g.spawn.x, 0.2, g.spawn.y)
+	mesh.SetPosition(g.spawn.x, 0.5, g.spawn.y)
 
 	kf, v := g.path()
 
@@ -116,24 +122,37 @@ func (g *Game) spawnEnemy() {
 	ch.SetBuffers(kf, v)
 	g.anim.AddChannel(ch)
 
-	g.app.Scene().Add(mesh)
+	g.scene.Add(mesh)
+}
+
+func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
+	// clear and render
+	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
+	rend.Render(g.scene, g.cam)
 }
 
 func main() {
-	app, _ := application.Create(application.Options{
-		Title:  "Hello G3N",
-		Width:  800,
-		Height: 600,
-	})
+	// set up variables
+	app := app.App()
+	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
-	g := Game { app: app, anim: animation.NewAnimation() }
+	cam := camera.New(1)
+	cam.SetPosition(0, 1, 0)
+	camera.NewOrbitControl(cam)
 
+	scene := core.NewNode()
+	scene.Add(cam)
+
+	// initialize game
+	g := Game { app: app, anim: animation.NewAnimation(), scene: scene, cam: cam }
+
+	// set up level
 	if err := g.loadLevel("forest"); err != nil {
 		fmt.Println(err)
 	}
 
 	g.spawnEnemy()
 
-	app.CameraPersp().SetPosition(0, 1, 0)
-	app.Run()
+	// run game
+	app.Run(g.Update)
 }
