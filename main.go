@@ -42,8 +42,13 @@ type Game struct {
 
 var models = map[rune]string{
 	'S': "tile_endRoundSpawn",
-	'-': "tile_straight",
 	'E': "tile_endSpawn",
+
+	'─': "tile_straight",
+	'┐': "tile_cornerSquare",
+	'└': "tile_cornerSquare",
+
+	'.': "tile", // todo add crystal decor
 }
 
 func loadModel(path string) *core.Node {
@@ -68,7 +73,7 @@ func (g *Game) loadLevel(path string) error {
 		return err
 	}
 
-	pointLight := light.NewPoint(&math32.Color{1, 1, 1}, 8.0)
+	pointLight := light.NewPoint(&math32.Color{1, 1, 1}, 10.0)
 
 	for i, row := range strings.Split(string(dat), "\n") {
 		for j, char := range row {
@@ -90,18 +95,18 @@ func (g *Game) loadLevel(path string) error {
 
 			// position light above center of level
 			// update inside loop to not recalculate level size
-			pointLight.SetPosition(float32(i / 2), 3, float32(j / 2))
+			pointLight.SetPosition(float32(i) / 2, 10, float32(j) / 2)
 		}
 	}
 
-	g.scene.Add(pointLight)
+	//g.scene.Add(pointLight)
 
 	return nil
 }
 
 func (g *Game) path() (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
-	keyframes.Append(0, 6)
+	keyframes.Append(0, 6) // todo customize speed
 
 	values = math32.NewArrayF32(0, 6)
 	values.AppendVector3(g.spawn.toVec(), g.end.toVec())
@@ -139,11 +144,17 @@ func main() {
 	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
 	cam := camera.New(1)
-	cam.SetPosition(0, 1, 0)
+	cam.SetPosition(0, 5, 0)
 	camera.NewOrbitControl(cam)
 
 	scene := core.NewNode()
 	scene.Add(cam)
+
+	// add lights
+	l := light.NewDirectional(&math32.Color {1.0, 1.0, 1.0 }, 0.8)
+	l.SetPosition(0, 1, 0)
+	scene.Add(l)
+	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
 	g := Game { app: app, anim: animation.NewAnimation(), scene: scene, cam: cam }
