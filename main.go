@@ -106,14 +106,6 @@ func (g *Game) path() (keyframes, values math32.ArrayF32) {
 	values = math32.NewArrayF32(0, 6)
 	values.AppendVector3(g.spawn.toVec(), g.end.toVec())
 
-
-	//keyframes = math32.NewArrayF32(0, 3)
-	//keyframes.Append(0, 2, 4, 6)
-	//
-	//values = math32.NewArrayF32(0, 9)
-	//values.AppendVector3(&math32.Vector3{0,0,0}, &math32.Vector3{1,0,0}, &math32.Vector3{1,1,0}, &math32.Vector3{0,0,0})
-
-
 	return
 }
 
