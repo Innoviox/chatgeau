@@ -14,6 +14,7 @@ import (
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/util/application"
+	"github.com/g3n/engine/animation"
 )
 
 type Square struct {
@@ -21,8 +22,13 @@ type Square struct {
 	y float32
 }
 
+func (s Square) toVec() *math32.Vector3 {
+	return &math32.Vector3 { s.x, 0.2, s.y }
+}
+
 type Game struct {
 	app   *application.Application
+	anim  *animation.Animation
 
 	spawn Square
 	end   Square
@@ -87,12 +93,28 @@ func (g *Game) loadLevel(path string) error {
 	return nil
 }
 
+func (g *Game) path() (keyframes, values math32.ArrayF32) {
+	keyframes = math32.NewArrayF32(0, 1)
+	keyframes.Append(0)
+
+	values = math32.NewArrayF32(0, 3)
+	values.AppendVector3(g.end.toVec())
+
+	return
+}
+
 func (g *Game) spawnEnemy() {
 	geom := geometry.NewSphere(0.2, 10, 10, 0, math.Pi*2, 0, math.Pi)
 	mat := material.NewStandard(math32.NewColor("DarkBlue"))
 	mesh := graphic.NewMesh(geom, mat)
 
-	mesh.SetPosition(g.spawn.x, 1, g.spawn.y)
+	mesh.SetPosition(g.spawn.x, 0.2, g.spawn.y)
+
+	kf, v := g.path()
+
+	ch := animation.NewPositionChannel(mesh)
+	ch.SetBuffers(kf, v)
+	g.anim.AddChannel(ch)
 
 	g.app.Scene().Add(mesh)
 }
@@ -104,7 +126,7 @@ func main() {
 		Height: 600,
 	})
 
-	g := Game { app: app }
+	g := Game { app: app, anim: animation.NewAnimation() }
 
 	if err := g.loadLevel("forest"); err != nil {
 		fmt.Println(err)
