@@ -12,7 +12,14 @@ import (
 	"github.com/g3n/engine/util/application"
 )
 
+type Square struct {
+	x int
+	y int
+}
+
 type Game struct {
+	spawn Square
+	end   Square
 }
 
 var models = map[rune]string{
@@ -36,7 +43,7 @@ func loadModel(path string) *core.Node {
 	return group
 }
 
-func loadLevel(app *application.Application, path string) error {
+func (g *Game) loadLevel(app *application.Application, path string) error {
 	dat, err := ioutil.ReadFile("resources/levels/"+path+".txt")
 	if err != nil {
 		return err
@@ -46,11 +53,17 @@ func loadLevel(app *application.Application, path string) error {
 
 	for i, row := range strings.Split(string(dat), "\n") {
 		for j, char := range row {
+			if char == 'S' { // todo make switch statement
+				g.spawn = Square {i, j}
+			}
+
 			m := loadModel(models[char])
 
 			app.Scene().Add(m)
 			m.SetPosition(float32(i), 0, float32(j))
 
+			// position light above center of level
+			// update inside loop to not recalculate level size
 			pointLight.SetPosition(float32(i / 2), 3, float32(j / 2))
 		}
 	}
@@ -60,6 +73,10 @@ func loadLevel(app *application.Application, path string) error {
 	return nil
 }
 
+func (g *Game) spawnEnemy() {
+	
+}
+
 func main() {
 	app, _ := application.Create(application.Options{
 		Title:  "Hello G3N",
@@ -67,15 +84,13 @@ func main() {
 		Height: 600,
 	})
 
-	// Add lights to the scene
+	g := Game {}
 
-	// Add an axis helper to the scene
-	//axis := graphic.NewAxisHelper(0.5)
-	//app.Scene().Add(axis)
-
-	if err := loadLevel(app, "forest"); err != nil {
+	if err := g.loadLevel(app, "forest"); err != nil {
 		fmt.Println(err)
 	}
+
+	g.spawnEnemy()
 
 	app.CameraPersp().SetPosition(0, 1, 0)
 	app.Run()
