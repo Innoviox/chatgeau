@@ -2,22 +2,28 @@ package main
 
 import (
 	"fmt"
-	"github.com/g3n/engine/light"
-	"github.com/g3n/engine/math32"
+	"github.com/g3n/engine/graphic"
+	"github.com/g3n/engine/material"
 	"io/ioutil"
+	"math"
 	"strings"
 
+	"github.com/g3n/engine/geometry"
+	"github.com/g3n/engine/light"
+	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/util/application"
 )
 
 type Square struct {
-	x int
-	y int
+	x float32
+	y float32
 }
 
 type Game struct {
+	app   *application.Application
+
 	spawn Square
 	end   Square
 }
@@ -43,7 +49,7 @@ func loadModel(path string) *core.Node {
 	return group
 }
 
-func (g *Game) loadLevel(app *application.Application, path string) error {
+func (g *Game) loadLevel(path string) error {
 	dat, err := ioutil.ReadFile("resources/levels/"+path+".txt")
 	if err != nil {
 		return err
@@ -54,12 +60,12 @@ func (g *Game) loadLevel(app *application.Application, path string) error {
 	for i, row := range strings.Split(string(dat), "\n") {
 		for j, char := range row {
 			if char == 'S' { // todo make switch statement
-				g.spawn = Square {i, j}
+				g.spawn = Square {float32(i), float32(j)}
 			}
 
 			m := loadModel(models[char])
 
-			app.Scene().Add(m)
+			g.app.Scene().Add(m)
 			m.SetPosition(float32(i), 0, float32(j))
 
 			// position light above center of level
@@ -68,13 +74,19 @@ func (g *Game) loadLevel(app *application.Application, path string) error {
 		}
 	}
 
-	app.Scene().Add(pointLight)
+	g.app.Scene().Add(pointLight)
 
 	return nil
 }
 
 func (g *Game) spawnEnemy() {
-	
+	geom := geometry.NewSphere(0.2, 10, 10, 0, math.Pi*2, 0, math.Pi)
+	mat := material.NewStandard(math32.NewColor("DarkBlue"))
+	mesh := graphic.NewMesh(geom, mat)
+
+	mesh.SetPosition(g.spawn.x, 1, g.spawn.y)
+
+	g.app.Scene().Add(mesh)
 }
 
 func main() {
@@ -84,9 +96,9 @@ func main() {
 		Height: 600,
 	})
 
-	g := Game {}
+	g := Game { app: app }
 
-	if err := g.loadLevel(app, "forest"); err != nil {
+	if err := g.loadLevel("forest"); err != nil {
 		fmt.Println(err)
 	}
 
