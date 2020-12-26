@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
@@ -8,9 +9,11 @@ import (
 	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/gls"
 	"github.com/g3n/engine/graphic"
+	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
+	"github.com/g3n/engine/window"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -19,12 +22,47 @@ import (
 type Game struct {
 	app   *app.Application
 	anims []*Animation
-	scene *core.Node
+	scene *core.Node // todo graphics subvariable
 	cam   *camera.Camera
+	panel *gui.Panel
 
 	sqs   [][]Square
 
 	lives int
+}
+
+func (g *Game) setupGui() {
+	// Set up callback to update viewport and camera aspect ratio when the window is resized
+	onResize := func(evname string, ev interface{}) {
+		width, height := g.app.GetSize()
+		g.app.Gls().Viewport(0, 0, int32(width), int32(height))
+		g.cam.SetAspect(float32(width) / float32(height))
+	}
+	g.app.Subscribe(window.OnWindowSize, onResize)
+	onResize("", nil)
+
+	w, h := g.app.GetSize()
+	g.panel = gui.NewPanel(float32(w), float32(h))
+
+	g.panel.SetRenderable(true)
+	g.panel.SetEnabled(true)
+	g.panel.SetVisible(true)
+	g.panel.SetBorders(1, 1, 1, 1)
+	//g.panel.SetColor4(&math32.Color4{13.0 / 256.0, 41.0 / 256.0, 62.0 / 256.0, 1})
+
+	g.scene.Add(g.panel)
+	gui.Manager().Set(g.scene)
+
+	lives := gui.NewLabel(fmt.Sprintf("Lives: %d", g.lives))
+	lives.SetPosition(0, 0)
+	lives.SetBorders(1, 1, 1, 1)
+	lives.SetFontSize(20)
+	lives.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
+	g.panel.Add(lives)
+}
+
+func (g *Game) updateGui() {
+	g.panel.ChildAt(0).(*gui.Label).SetText(fmt.Sprintf("Lives: %d", g.lives))
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -119,6 +157,7 @@ func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize ene
 	anim.SetPaused(false)
 	g.anims = append(g.anims, &Animation{anim, func() {
 		g.lives--
+		g.updateGui()
 		g.scene.Remove(mesh)
 	}})
 
@@ -128,7 +167,10 @@ func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize ene
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// clear and render
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
+
+	gui.Manager().TimerManager.ProcessTimers()
 	rend.Render(g.scene, g.cam)
+
 
 	anims := make([]*Animation, 0)
 	for _, anim := range g.anims {

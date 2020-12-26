@@ -34,9 +34,9 @@ func main() {
 	app := app.App()
 	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
-	cam := camera.New(1)
-
 	scene := core.NewNode()
+
+	cam := camera.New(1)
 	scene.Add(cam)
 
 	// add lights
@@ -47,6 +47,7 @@ func main() {
 
 	// initialize game
 	g := Game { app: app, scene: scene, cam: cam, lives: 20 }
+	g.setupGui()
 
 	// set up level
 	if err := g.loadLevel("forest2"); err != nil {
