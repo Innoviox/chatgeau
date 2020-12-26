@@ -5,9 +5,10 @@ import (
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/light"
 	"github.com/g3n/engine/math32"
-	"github.com/g3n/engine/window"
+ 	"github.com/g3n/engine/window"
 	"math"
 )
 
@@ -35,6 +36,7 @@ func main() {
 	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
 	scene := core.NewNode()
+	gui.Manager().Set(scene)
 
 	cam := camera.New(1)
 	scene.Add(cam)
@@ -50,7 +52,7 @@ func main() {
 	g.setupGui()
 
 	// set up level
-	if err := g.loadLevel("forest2"); err != nil {
+	if err := g.loadLevel("forest"); err != nil {
 		fmt.Println(err)
 	}
 

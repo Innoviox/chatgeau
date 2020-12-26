@@ -32,26 +32,11 @@ type Game struct {
 }
 
 func (g *Game) setupGui() {
-	// Set up callback to update viewport and camera aspect ratio when the window is resized
-	onResize := func(evname string, ev interface{}) {
-		width, height := g.app.GetSize()
-		g.app.Gls().Viewport(0, 0, int32(width), int32(height))
-		g.cam.SetAspect(float32(width) / float32(height))
-	}
-	g.app.Subscribe(window.OnWindowSize, onResize)
-	onResize("", nil)
-
 	w, h := g.app.GetSize()
 	g.panel = gui.NewPanel(float32(w), float32(h))
-
-	g.panel.SetRenderable(true)
-	g.panel.SetEnabled(true)
-	g.panel.SetVisible(true)
 	g.panel.SetBorders(1, 1, 1, 1)
-	//g.panel.SetColor4(&math32.Color4{13.0 / 256.0, 41.0 / 256.0, 62.0 / 256.0, 1})
 
 	g.scene.Add(g.panel)
-	gui.Manager().Set(g.scene)
 
 	lives := gui.NewLabel(fmt.Sprintf("Lives: %d", g.lives))
 	lives.SetPosition(0, 0)
@@ -59,10 +44,23 @@ func (g *Game) setupGui() {
 	lives.SetFontSize(20)
 	lives.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
 	g.panel.Add(lives)
+
+	g.app.Subscribe(window.OnWindowSize, g.onResize)
+	g.onResize("", nil)
 }
 
 func (g *Game) updateGui() {
 	g.panel.ChildAt(0).(*gui.Label).SetText(fmt.Sprintf("Lives: %d", g.lives))
+}
+
+func (g *Game) onResize(evname string, ev interface{}) {
+	width, height := g.app.GetFramebufferSize()
+	g.app.Gls().Viewport(0, 0, int32(width), int32(height))
+
+	// Set camera aspect ratio
+	g.cam.SetAspect(float32(width) / float32(height))
+
+	g.panel.SetSize(float32(width), float32(height))
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -94,6 +92,7 @@ func (g *Game) loadLevel(path string) error {
 
 	g.cam.SetPosition(0, 20, 0)
 	g.cam.LookAt(&math32.Vector3{float32(len(g.sqs)) / 2, 0, float32(len(g.sqs[0])) / 2}, &math32.Vector3{0, 1, 0})
+	//fmt.Println(g.cam.Rotation())
 
 	return nil
 }
