@@ -36,8 +36,7 @@ type Game struct {
 	scene *core.Node
 	cam   *camera.Camera
 
-	spawn Square
-	end   Square
+	sqs  []Square
 }
 
 var models = map[rune]string{
@@ -77,14 +76,18 @@ func (g *Game) loadLevel(path string) error {
 		for j, char := range row {
 			sq := Square {float32(i), float32(j)}
 			roty := float32(0)
+			add := true
 
 			switch char {
-			case 'S': g.spawn = sq
-			case 'E':
-				g.end   = sq
-				roty = math.Pi
+			case 'E': roty = math.Pi
 			case '1': roty = math.Pi / 2
 			case '2': roty = 3 * math.Pi / 2
+
+			case '.': add = false
+			}
+
+			if add {
+				g.sqs = append(g.sqs, sq)
 			}
 
 			m := loadModel(models[char])
@@ -100,10 +103,12 @@ func (g *Game) loadLevel(path string) error {
 
 func (g *Game) path() (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
-	keyframes.Append(0, 6) // todo customize speed
-
 	values = math32.NewArrayF32(0, 6)
-	values.AppendVector3(g.spawn.toVec(), g.end.toVec())
+
+	for i, sq := range g.sqs {
+		keyframes.Append(float32(i))
+		values.AppendVector3(sq.toVec())
+	}
 
 	return
 }
@@ -113,7 +118,7 @@ func (g *Game) spawnEnemy() {
 	mat := material.NewStandard(math32.NewColor("DarkBlue"))
 	mesh := graphic.NewMesh(geom, mat)
 
-	mesh.SetPosition(g.spawn.x, 0.5, g.spawn.y)
+	mesh.SetPosition(g.sqs[0].x, 0.5, g.sqs[0].y)
 
 	kf, v := g.path()
 
