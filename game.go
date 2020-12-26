@@ -52,6 +52,9 @@ func (g *Game) loadLevel(path string) error {
 		}
 	}
 
+	g.cam.SetPosition(0, 20, 0)
+	g.cam.LookAt(&math32.Vector3{float32(len(g.sqs)) / 2, 0, float32(len(g.sqs[0])) / 2}, &math32.Vector3{0, 1, 0})
+
 	return nil
 }
 

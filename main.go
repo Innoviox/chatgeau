@@ -35,8 +35,6 @@ func main() {
 	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
 	cam := camera.New(1)
-	cam.SetPosition(0, 5, 0)
-	camera.NewOrbitControl(cam)
 
 	scene := core.NewNode()
 	scene.Add(cam)
