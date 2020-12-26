@@ -39,3 +39,9 @@ type Animation struct {
 	*animation.Animation
 	callback func()
 }
+
+// go. why do you not implement this. fuck you
+func Max(x, y int) int {
+	if x < y { return y }
+	return x
+}
