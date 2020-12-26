@@ -24,6 +24,8 @@ import (
 type Square struct {
 	x float32
 	y float32
+
+	at rune
 }
 
 func (s Square) toVec() *math32.Vector3 {
@@ -36,18 +38,23 @@ type Game struct {
 	scene *core.Node
 	cam   *camera.Camera
 
-	sqs  []Square
+	sqs  [][]Square
 }
 
-var models = map[rune]string{
-	'S': "tile_endRoundSpawn",
-	'E': "tile_endSpawn",
+var models = map[rune]struct {
+	name string
+	roty float32
+	add  bool
+} { // todo add rotations to here
+	'S': { "tile_endRoundSpawn" , 0, true },
+	'E': { "tile_endSpawn", math.Pi, true },
 
-	'-': "tile_straight",
-	'1': "tile_cornerSquare",
-	'2': "tile_cornerSquare",
+	'-': { "tile_straight", 0, true },
+	'|': { "tile_straight", math.Pi / 2, true},
+	'1': { "tile_cornerSquare", math.Pi / 2, true },
+	'2': { "tile_cornerSquare", 3 * math.Pi / 2, true },
 
-	'.': "tile", // todo add crystal decor
+	'.': {"tile", 0, false }, // todo add crystal decor
 }
 
 func loadModel(path string) *core.Node {
@@ -72,27 +79,23 @@ func (g *Game) loadLevel(path string) error {
 		return err
 	}
 
-	for i, row := range strings.Split(string(dat), "\n") {
+	lines := strings.Split(string(dat), "\n")
+	g.sqs = make([][]Square, len(lines))
+
+	for i, row := range lines {
+		g.sqs[i] = make([]Square, len(row))
+
 		for j, char := range row {
-			sq := Square {float32(i), float32(j)}
-			roty := float32(0)
-			add := true
+			model := models[char]
 
-			switch char {
-			case 'E': roty = math.Pi
-			case '1': roty = math.Pi / 2
-			case '2': roty = 3 * math.Pi / 2
-
-			case '.': add = false
+			if model.add {
+				g.sqs[i][j] = Square { float32(i), float32(j), char }
 			}
 
-			if add {
-				g.sqs = append(g.sqs, sq)
-			}
 
-			m := loadModel(models[char])
+			m := loadModel(model.name)
 			m.SetPosition(float32(i), 0, float32(j))
-			m.SetRotation(0, roty, 0)
+			m.SetRotation(0, model.roty, 0)
 
 			g.scene.Add(m)
 		}
