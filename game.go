@@ -18,11 +18,13 @@ import (
 
 type Game struct {
 	app   *app.Application
-	anims []*animation.Animation
+	anims []*Animation
 	scene *core.Node
 	cam   *camera.Camera
 
-	sqs  [][]Square
+	sqs   [][]Square
+
+	lives int
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -115,7 +117,10 @@ func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize ene
 	anim := animation.NewAnimation()
 	anim.AddChannel(ch)
 	anim.SetPaused(false)
-	g.anims = append(g.anims, anim)
+	g.anims = append(g.anims, &Animation{anim, func() {
+		g.lives--
+		g.scene.Remove(mesh)
+	}})
 
 	g.scene.Add(mesh)
 }
@@ -125,7 +130,14 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
 	rend.Render(g.scene, g.cam)
 
+	anims := make([]*Animation, 0)
 	for _, anim := range g.anims {
 		anim.Update(float32(deltaTime.Seconds()))
+		if anim.Paused() {
+			anim.callback()
+		} else {
+			anims = append(anims, anim)
+		}
 	}
+	g.anims = anims
 }

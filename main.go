@@ -46,10 +46,10 @@ func main() {
 	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
-	g := Game { app: app, scene: scene, cam: cam }
+	g := Game { app: app, scene: scene, cam: cam, lives: 20 }
 
 	// set up level
-	if err := g.loadLevel("forest"); err != nil {
+	if err := g.loadLevel("forest2"); err != nil {
 		fmt.Println(err)
 	}
 

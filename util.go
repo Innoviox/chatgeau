@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
@@ -32,4 +33,9 @@ func loadModel(path string) *core.Node {
 	}
 
 	return group
+}
+
+type Animation struct {
+	*animation.Animation
+	callback func()
 }
