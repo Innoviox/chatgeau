@@ -45,14 +45,16 @@ var models = map[rune]struct {
 	name string
 	roty float32
 	add  bool
-} { // todo add rotations to here
+} {
 	'S': { "tile_endRoundSpawn" , 0, true },
 	'E': { "tile_endSpawn", math.Pi, true },
 
 	'-': { "tile_straight", 0, true },
 	'|': { "tile_straight", math.Pi / 2, true},
-	'1': { "tile_cornerSquare", math.Pi / 2, true },
-	'2': { "tile_cornerSquare", 3 * math.Pi / 2, true },
+	'1': { "tile_cornerSquare", 1 * math.Pi / 2, true },
+	'2': { "tile_cornerSquare", 2 * math.Pi / 2, true },
+	'3': { "tile_cornerSquare", 4 * math.Pi / 2, true },
+	'4': { "tile_cornerSquare", 3 * math.Pi / 2, true },
 
 	'.': {"tile", 0, false }, // todo add crystal decor
 }
@@ -92,7 +94,6 @@ func (g *Game) loadLevel(path string) error {
 				g.sqs[i][j] = Square { float32(i), float32(j), char }
 			}
 
-
 			m := loadModel(model.name)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, model.roty, 0)
@@ -108,12 +109,28 @@ func (g *Game) path() (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
 	values = math32.NewArrayF32(0, 6)
 
-	for i, sq := range g.sqs {
-		keyframes.Append(float32(i))
-		values.AppendVector3(sq.toVec())
-	}
+	i, j := 0, 0
+	horiz := 1 // todo vert
+	end := false
+	n := 0
+	for {
+		sq := g.sqs[i][j]
 
-	return
+		switch sq.at {
+		case 'S', '-': j += horiz
+		case '1', '3', '|': i++
+		case '2': horiz = -1; j += horiz
+		case '4': horiz = 1; j += horiz
+		case 'E': end = true
+		}
+
+		keyframes.Append(float32(n))
+		values.AppendVector3(sq.toVec())
+
+		if end { return }
+
+		n++
+	}
 }
 
 func (g *Game) spawnEnemy() {
@@ -121,7 +138,7 @@ func (g *Game) spawnEnemy() {
 	mat := material.NewStandard(math32.NewColor("DarkBlue"))
 	mesh := graphic.NewMesh(geom, mat)
 
-	mesh.SetPosition(g.sqs[0].x, 0.5, g.sqs[0].y)
+	mesh.SetPosition(g.sqs[0][0].x, 0.5, g.sqs[0][0].y)
 
 	kf, v := g.path()
 
