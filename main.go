@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
@@ -47,7 +46,7 @@ func main() {
 	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
-	g := Game { app: app, anim: animation.NewAnimation(), scene: scene, cam: cam }
+	g := Game { app: app, scene: scene, cam: cam }
 
 	// set up level
 	if err := g.loadLevel("forest"); err != nil {

@@ -18,7 +18,7 @@ import (
 
 type Game struct {
 	app   *app.Application
-	anim  *animation.Animation
+	anims []*animation.Animation
 	scene *core.Node
 	cam   *camera.Camera
 
@@ -111,7 +111,11 @@ func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize ene
 
 	ch := animation.NewPositionChannel(mesh)
 	ch.SetBuffers(kf, v)
-	g.anim.AddChannel(ch)
+
+	anim := animation.NewAnimation()
+	anim.AddChannel(ch)
+	anim.SetPaused(false)
+	g.anims = append(g.anims, anim)
 
 	g.scene.Add(mesh)
 }
@@ -121,5 +125,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
 	rend.Render(g.scene, g.cam)
 
-	g.anim.Update(float32(deltaTime.Seconds()))
+	for _, anim := range g.anims {
+		anim.Update(float32(deltaTime.Seconds()))
+	}
 }
