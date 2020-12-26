@@ -8,6 +8,7 @@ import (
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/light"
 	"github.com/g3n/engine/math32"
+	"github.com/g3n/engine/window"
 	"math"
 )
 
@@ -53,7 +54,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	g.spawnEnemy()
+	app.IWindow.Subscribe(window.OnMouseDown, g.spawnEnemy)
 
 	// run game
 	app.Run(g.Update)

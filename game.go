@@ -100,7 +100,7 @@ func (g *Game) path() (keyframes, values math32.ArrayF32) {
 	}
 }
 
-func (g *Game) spawnEnemy() {
+func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize enemy (Enemy struct?)
 	geom := geometry.NewSphere(0.2, 10, 10)
 	mat := material.NewStandard(math32.NewColor("DarkBlue"))
 	mesh := graphic.NewMesh(geom, mat)
