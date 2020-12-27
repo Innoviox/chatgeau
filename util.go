@@ -6,7 +6,26 @@ import (
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
+	"math"
 )
+
+var models = map[rune]struct {
+	name string
+	roty float32
+	add  bool
+} {
+	'S': { "tile_endRoundSpawn" , 0, true },
+	'E': { "tile_endSpawn", math.Pi, true },
+
+	'-': { "tile_straight", 0, true },
+	'|': { "tile_straight", math.Pi / 2, true},
+	'1': { "tile_cornerSquare", 1 * math.Pi / 2, true },
+	'2': { "tile_cornerSquare", 2 * math.Pi / 2, true },
+	'3': { "tile_cornerSquare", 4 * math.Pi / 2, true },
+	'4': { "tile_cornerSquare", 3 * math.Pi / 2, true },
+
+	'.': {"tile", 0, false }, // todo add crystal decor
+}
 
 type Square struct {
 	x float32
@@ -44,4 +63,9 @@ type Animation struct {
 func Max(x, y int) int {
 	if x < y { return y }
 	return x
+}
+
+type Spawn struct {
+	enemy rune
+	time  float64
 }

@@ -8,32 +8,13 @@ import (
 	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/light"
 	"github.com/g3n/engine/math32"
- 	"github.com/g3n/engine/window"
-	"math"
+	"github.com/g3n/engine/window"
 )
-
-var models = map[rune]struct {
-	name string
-	roty float32
-	add  bool
-} {
-	'S': { "tile_endRoundSpawn" , 0, true },
-	'E': { "tile_endSpawn", math.Pi, true },
-
-	'-': { "tile_straight", 0, true },
-	'|': { "tile_straight", math.Pi / 2, true},
-	'1': { "tile_cornerSquare", 1 * math.Pi / 2, true },
-	'2': { "tile_cornerSquare", 2 * math.Pi / 2, true },
-	'3': { "tile_cornerSquare", 4 * math.Pi / 2, true },
-	'4': { "tile_cornerSquare", 3 * math.Pi / 2, true },
-
-	'.': {"tile", 0, false }, // todo add crystal decor
-}
 
 func main() {
 	// set up variables
-	app := app.App()
-	app.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
+	application := app.App()
+	application.Gls().ClearColor(0.5, 0.5, 0.5, 1.0)
 
 	scene := core.NewNode()
 	gui.Manager().Set(scene)
@@ -48,7 +29,7 @@ func main() {
 	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
-	g := Game { app: app, scene: scene, cam: cam, lives: 20 }
+	g := Game { app: application, scene: scene, cam: cam, lives: 20 }
 	g.setupGui()
 
 	// set up level
@@ -56,8 +37,8 @@ func main() {
 		fmt.Println(err)
 	}
 
-	app.IWindow.Subscribe(window.OnMouseDown, g.spawnEnemy)
+	application.IWindow.Subscribe(window.OnMouseDown, g.spawnEnemy)
 
 	// run game
-	app.Run(g.Update)
+	application.Run(g.Update)
 }

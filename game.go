@@ -20,13 +20,14 @@ import (
 )
 
 type Game struct {
-	app   *app.Application
-	anims []*Animation
-	scene *core.Node // todo graphics subvariable
-	cam   *camera.Camera
-	panel *gui.Panel
+	app    *app.Application
+	anims  []*Animation
+	scene  *core.Node // todo graphics subvariable
+	cam    *camera.Camera
+	panel  *gui.Panel
 
-	sqs   [][]Square
+	sqs    [][]Square
+	spawns []Spawn
 
 	lives int
 }
@@ -94,6 +95,30 @@ func (g *Game) loadLevel(path string) error {
 
 	g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
 	g.cam.LookAt(&math32.Vector3{midx, 0, midz}, &math32.Vector3{0, 1, 0})
+
+	g.loadSpawns(path)
+
+	return nil
+}
+
+func (g *Game) loadSpawns(path string) error {
+	dat, err := ioutil.ReadFile("resources/levels/"+path+"_spawns.txt")
+	if err != nil {
+		return err
+	}
+
+	lines := strings.Split(string(dat), "\n")
+	var t float64 = 0
+
+	g.spawns = make([]Spawn, 1)
+
+	for _, row := range lines {
+		for _, char := range row {
+			g.spawns = append(g.spawns, Spawn{ char, t })
+			t += 0.1 // todo softcode
+		}
+		t += 1.0
+	}
 
 	return nil
 }
