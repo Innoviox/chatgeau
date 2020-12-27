@@ -2,15 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
-	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/gls"
-	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/gui"
-	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
 	"github.com/g3n/engine/window"
@@ -20,14 +16,14 @@ import (
 )
 
 type Game struct {
-	app    *app.Application
-	anims  []*Animation
-	scene  *core.Node // todo graphics subvariable
-	cam    *camera.Camera
-	panel  *gui.Panel
+	app     *app.Application
+	anims   []*Animation
+	scene   *core.Node // todo graphics subvariable
+	cam     *camera.Camera
+	panel   *gui.Panel
 
-	sqs    [][]Square
-	spawns []Spawn
+	sqs     [][]Square
+	spawner *Spawner
 
 	lives int
 }
@@ -96,34 +92,14 @@ func (g *Game) loadLevel(path string) error {
 	g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
 	g.cam.LookAt(&math32.Vector3{midx, 0, midz}, &math32.Vector3{0, 1, 0})
 
-	g.loadSpawns(path)
+	g.spawner = loadSpawns(path)
 
 	return nil
 }
 
-func (g *Game) loadSpawns(path string) error {
-	dat, err := ioutil.ReadFile("resources/levels/"+path+"_spawns.txt")
-	if err != nil {
-		return err
-	}
 
-	lines := strings.Split(string(dat), "\n")
-	var t float64 = 0
 
-	g.spawns = make([]Spawn, 1)
-
-	for _, row := range lines {
-		for _, char := range row {
-			g.spawns = append(g.spawns, Spawn{ char, t })
-			t += 0.1 // todo softcode
-		}
-		t += 1.0
-	}
-
-	return nil
-}
-
-func (g *Game) path() (keyframes, values math32.ArrayF32) {
+func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
 	values = math32.NewArrayF32(0, 6)
 
@@ -156,37 +132,13 @@ func (g *Game) path() (keyframes, values math32.ArrayF32) {
 		i += vert
 		j += horiz
 
-		keyframes.Append(float32(n))
+		keyframes.Append(float32(n) / speed)
 		values.AppendVector3(sq.toVec())
 
 		if end { return }
 
 		n++
 	}
-}
-
-func (g *Game) spawnEnemy(evname string, ev interface{}) { // todo customize enemy (Enemy struct?)
-	geom := geometry.NewSphere(0.2, 10, 10)
-	mat := material.NewStandard(math32.NewColor("DarkBlue"))
-	mesh := graphic.NewMesh(geom, mat)
-
-	mesh.SetPosition(g.sqs[0][0].x, 0.5, g.sqs[0][0].y)
-
-	kf, v := g.path()
-
-	ch := animation.NewPositionChannel(mesh)
-	ch.SetBuffers(kf, v)
-
-	anim := animation.NewAnimation()
-	anim.AddChannel(ch)
-	anim.SetPaused(false)
-	g.anims = append(g.anims, &Animation{anim, func() {
-		g.lives--
-		g.updateGui()
-		g.scene.Remove(mesh)
-	}})
-
-	g.scene.Add(mesh)
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
@@ -196,7 +148,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	gui.Manager().TimerManager.ProcessTimers()
 	rend.Render(g.scene, g.cam)
 
-
+	// todo make function (Animator class?)
 	anims := make([]*Animation, 0)
 	for _, anim := range g.anims {
 		anim.Update(float32(deltaTime.Seconds()))
@@ -207,4 +159,6 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 		}
 	}
 	g.anims = anims
+
+	g.spawnEnemy(g.spawner.update(deltaTime.Seconds()))
 }
