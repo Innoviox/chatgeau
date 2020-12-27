@@ -6,6 +6,7 @@ import (
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
+	"github.com/g3n/engine/window"
 	"math"
 )
 
@@ -68,4 +69,8 @@ func Max(x, y int) int {
 type Spawn struct {
 	enemy rune
 	time  float64
+}
+
+func getCursorSquare(ev *window.CursorEvent) (int, int) {
+	return 0, 0
 }

@@ -141,6 +141,16 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 	}
 }
 
+func (g *Game) onCursor(evname string, ev interface{}) {
+	cev := ev.(*window.CursorEvent)
+	fmt.Println(getCursorSquare(cev))
+}
+
+func (g *Game) onClick(evname string, ev interface{}) {
+	//mev := ev.(*window.MouseEvent)
+	//fmt.Println(mev.Xpos, mev.Ypos)
+}
+
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// clear and render
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
