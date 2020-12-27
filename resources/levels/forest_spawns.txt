@@ -1,3 +1,11 @@
 RR
 G
 B
+
+
+
+G
+B
+RR
+GG
+RGB

@@ -85,7 +85,7 @@ func (s *Spawner) update(delta float64) rune {
 	}
 
 	e := s.spawns[s.idx]
-	
+
 	if s.time > e.time {
 		s.idx++
 		return e.enemy
