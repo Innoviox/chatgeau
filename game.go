@@ -143,7 +143,7 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 
 func (g *Game) onCursor(evname string, ev interface{}) {
 	cev := ev.(*window.CursorEvent)
-	fmt.Println(getCursorSquare(cev))
+	getCursorSquare(cev)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
