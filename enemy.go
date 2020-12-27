@@ -69,7 +69,7 @@ func loadSpawns(path string) *Spawner {
 	for _, row := range lines {
 		for _, char := range row {
 			s.spawns = append(s.spawns, Spawn{ char, t })
-			t += 0.1 // todo softcode
+			t += 0.2 // todo softcode
 		}
 		t = math.Round(t) + 1
 	}
@@ -85,9 +85,7 @@ func (s *Spawner) update(delta float64) rune {
 	}
 
 	e := s.spawns[s.idx]
-
-	//fmt.Println(e.time, s.time)
-
+	
 	if s.time > e.time {
 		s.idx++
 		return e.enemy
