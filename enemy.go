@@ -41,7 +41,7 @@ func (g *Game) spawnEnemy(typ rune) {
 	anim := animation.NewAnimation()
 	anim.AddChannel(ch)
 	anim.SetPaused(false)
-	g.anims = append(g.anims, &Animation{anim, func() {
+	g.animator.add(&Animation{anim, func() {
 		g.lives--
 		g.updateGui()
 		g.scene.Remove(mesh)
@@ -78,11 +78,11 @@ func loadSpawns(path string) *Spawner {
 }
 
 func (s *Spawner) update(delta float64, spawn func(rune)) {
-	s.time += delta
-
 	if s.idx >= len(s.spawns) {
 		return
 	}
+
+	s.time += delta
 
 	e := s.spawns[s.idx]
 

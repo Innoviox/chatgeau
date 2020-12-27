@@ -29,8 +29,9 @@ func main() {
 	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
-	g := Game { app: application, scene: scene, cam: cam, lives: 20 }
+	g := Game { app: application, scene: scene, cam: cam, animator: new(Animator), lives: 20 }
 	g.setupGui()
+	g.animator.init()
 
 	// set up level
 	if err := g.loadLevel("forest"); err != nil {

@@ -16,16 +16,19 @@ import (
 )
 
 type Game struct {
-	app     *app.Application
-	anims   []*Animation
-	scene   *core.Node // todo graphics subvariable
-	cam     *camera.Camera
-	panel   *gui.Panel
+	app      *app.Application
 
-	sqs     [][]Square
-	spawner *Spawner
+	scene    *core.Node // todo graphics subvariable
+	cam      *camera.Camera
 
-	lives int
+	panel    *gui.Panel
+
+	sqs      [][]Square
+
+	animator *Animator
+	spawner  *Spawner
+
+	lives    int
 }
 
 func (g *Game) setupGui() {
@@ -152,23 +155,14 @@ func (g *Game) onClick(evname string, ev interface{}) {
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
-	// clear and render
+	// clear
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
 
+	// render
 	gui.Manager().TimerManager.ProcessTimers()
 	rend.Render(g.scene, g.cam)
 
-	// todo make function (Animator class?)
-	anims := make([]*Animation, 0)
-	for _, anim := range g.anims {
-		anim.Update(float32(deltaTime.Seconds()))
-		if anim.Paused() {
-			anim.callback()
-		} else {
-			anims = append(anims, anim)
-		}
-	}
-	g.anims = anims
-
+	// update game state
+	g.animator.update(deltaTime.Seconds())
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 }
