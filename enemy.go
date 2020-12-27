@@ -77,19 +77,17 @@ func loadSpawns(path string) *Spawner {
 	return s
 }
 
-func (s *Spawner) update(delta float64) rune {
+func (s *Spawner) update(delta float64, spawn func(rune)) {
 	s.time += delta
 
 	if s.idx >= len(s.spawns) {
-		return '!'
+		return
 	}
 
 	e := s.spawns[s.idx]
 
 	if s.time > e.time {
 		s.idx++
-		return e.enemy
+		spawn(e.enemy)
 	}
-
-	return '!' // todo make better
 }

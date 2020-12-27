@@ -170,5 +170,5 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	}
 	g.anims = anims
 
-	g.spawnEnemy(g.spawner.update(deltaTime.Seconds()))
+	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 }
