@@ -19,10 +19,10 @@ var models = map[rune]struct {
 
 	'-': { "tile_straight", 0, true },
 	'|': { "tile_straight", math.Pi / 2, true},
-	'1': { "tile_cornerSquare", 1 * math.Pi / 2, true },
-	'2': { "tile_cornerSquare", 2 * math.Pi / 2, true },
-	'3': { "tile_cornerSquare", 4 * math.Pi / 2, true },
-	'4': { "tile_cornerSquare", 3 * math.Pi / 2, true },
+	'1': { "tile_cornerSquare", 1 * math.Pi / 2, true }, // ┐
+	'2': { "tile_cornerSquare", 2 * math.Pi / 2, true }, // ┘
+	'3': { "tile_cornerSquare", 4 * math.Pi / 2, true }, // ┌
+	'4': { "tile_cornerSquare", 3 * math.Pi / 2, true }, // └
 
 	'.': {"tile", 0, false }, // todo add crystal decor
 }
