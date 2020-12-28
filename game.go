@@ -100,13 +100,28 @@ func (g *Game) loadLevel(path string) error {
 	return nil
 }
 
+func (g *Game) startIndex() (int, int) {
+	i, j := 0, 0
 
+	for {
+		sq := g.sqs[i][j]
+		if sq.at == 'S' {
+			return i, j
+		}
+
+		j++
+		if j == len(g.sqs[i]) {
+			i++
+			j = 0
+		}
+	}
+}
 
 func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
 	values = math32.NewArrayF32(0, 6)
 
-	i, j := 0, 0
+	i, j := g.startIndex()
 	horiz, vert := 1, 0 // todo down at start
 	end := false
 	n := 0
@@ -145,13 +160,14 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 }
 
 func (g *Game) onCursor(evname string, ev interface{}) {
-	cev := ev.(*window.CursorEvent)
-	getCursorSquare(cev)
+	mev := ev.(*window.CursorEvent)
+	fmt.Println(mev.Xpos, mev.Ypos)
+	//getCursorSquare(cev)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
-	//mev := ev.(*window.MouseEvent)
-	//fmt.Println(mev.Xpos, mev.Ypos)
+	mev := ev.(*window.MouseEvent)
+	fmt.Println(mev.Xpos, mev.Ypos)
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {

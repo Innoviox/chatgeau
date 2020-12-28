@@ -31,7 +31,8 @@ func (g *Game) spawnEnemy(typ rune) {
 	mat := material.NewStandard(math32.NewColor(enemy.mat))
 	mesh := graphic.NewMesh(geom, mat)
 
-	mesh.SetPosition(g.sqs[0][0].x, 0.5, g.sqs[0][0].y)
+	i, j := g.startIndex()
+	mesh.SetPosition(g.sqs[i][j].x, 0.5, g.sqs[i][j].y)
 
 	kf, v := g.path(enemy.speed)
 
