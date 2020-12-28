@@ -27,16 +27,7 @@ type Game struct {
 	spawner  *Spawner
 
 	lives    int
-}
-
-func (g *Game) onResize(evname string, ev interface{}) {
-	width, height := g.app.GetFramebufferSize()
-	g.app.Gls().Viewport(0, 0, int32(width), int32(height))
-
-	// Set camera aspect ratio
-	g.cam.SetAspect(float32(width) / float32(height))
-
-	g.panel.SetSize(float32(width), float32(height))
+	money    int
 }
 
 func (g *Game) loadLevel(path string) error {

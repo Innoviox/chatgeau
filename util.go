@@ -76,3 +76,7 @@ func (g *Game) getCursorSquare(ev *window.CursorEvent) (int, int) {
 	fmt.Println(math.Hypot(float64(ev.Xpos) - float64(w)/2, float64(g.cam.Position().Z)), math.Hypot(float64(ev.Ypos) - float64(h)/2, float64(g.cam.Position().Z)))
 	return 0, 0
 }
+
+func loadPicture(layers [4]string) {
+
+}
