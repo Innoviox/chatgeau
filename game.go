@@ -147,8 +147,8 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 	mev := ev.(*window.CursorEvent)
 
 	width, height := g.app.GetSize()
-	x := 2*(mev.Xpos/float32(width)) - 1
-	y := -2*(mev.Ypos/float32(height)) + 1
+	x :=  2 * (mev.Xpos / float32(width)) - 1
+	y := -2 * (mev.Ypos / float32(height)) + 1
 
 	g.rc.SetFromCamera(g.cam, x, y)
 
