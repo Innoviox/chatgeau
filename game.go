@@ -156,9 +156,13 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 		return
 	}
 
-	obj := intersects[0].Object
-	//fmt.Println(obj.Name())
-	g.scene.Remove(obj)
+	//obj := intersects[0].Object
+	////fmt.Println(obj.Name())
+	//g.scene.Remove(obj)
+
+	for _, obj := range intersects {
+		g.scene.Remove(obj.Object)
+	}
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {

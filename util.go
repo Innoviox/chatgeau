@@ -46,11 +46,11 @@ func loadModel(path string) *core.Node {
 		return nil
 	}
 
-	o := &dec.Objects[0]
-	g, _ := dec.NewGeometry(o)
-	for idx := 0; idx < g.GroupCount(); idx++ {
-		fmt.Println(idx, g.GroupAt(idx).Matid)
-	}
+	//o := &dec.Objects[0]
+	//g, _ := dec.NewGeometry(o)
+	//for idx := 0; idx < g.GroupCount(); idx++ {
+	//	fmt.Println(idx, g.GroupAt(idx).Matid)
+	//}
 
 	group, err := dec.NewGroup()
 	if err != nil {
