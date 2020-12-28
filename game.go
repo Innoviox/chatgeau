@@ -59,8 +59,12 @@ func (g *Game) loadLevel(path string) error {
 
 	midx, midz := float32(len(g.sqs)) / 2, float32(len(g.sqs[0])) / 2
 
-	g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
+	//g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
+	g.cam.SetPosition(0, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1) / 2, 0)
 	g.cam.LookAt(&math32.Vector3{midx, 0, midz}, &math32.Vector3{0, 1, 0})
+
+	//g.cam.RotateX(0.5)
+	//g.cam.RotateY(0.05)
 
 	g.spawner = loadSpawns(path)
 
@@ -148,4 +152,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// update game state
 	g.animator.update(deltaTime.Seconds())
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
+
+	//g.cam.RotateY(0.01)
+	//fmt.Println(g.cam.Rotation())
 }
