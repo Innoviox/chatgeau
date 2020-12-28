@@ -40,20 +40,12 @@ func (g *Game) setupGui() {
 
 	y := float32(60)
 
-	for k, _ := range towers {
-		for _, name := range reversed(k) {
-			if name == "" {
-				continue
-			}
+	for _, v := range towers {
+		lbl := gui.NewLabel(v.name)
+		lbl.SetPosition(0, y)
+		g.panel.Add(lbl)
 
-			lbl := gui.NewImageLabel("")
-			img, _ := gui.NewImage("resources/sprites_side/" + name + ".png")
-			lbl.SetImage(img)
-			lbl.SetPosition(0, y)
-			g.panel.Add(lbl)
-
-			y += 30
-		}
+		y += 30
 	}
 
 	g.app.Subscribe(window.OnWindowSize, g.onResize)

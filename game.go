@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
@@ -8,6 +9,7 @@ import (
 	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
+	"github.com/g3n/engine/window"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -131,8 +133,15 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 }
 
 func (g *Game) onCursor(evname string, ev interface{}) {
-	//mev := ev.(*window.CursorEvent)
-	//fmt.Println(mev.Xpos, mev.Ypos)
+	mev := ev.(*window.CursorEvent)
+
+	w, h := g.app.GetSize()
+	vec := math32.NewVector3(mev.Xpos / float32(w), mev.Ypos / float32(h), 1)
+
+	//raycaster := collision.NewRaycaster(&g.cam.Position(), vec)
+
+	//raycaster.IntersectObjects()
+	fmt.Println(vec)
 	//g.getCursorSquare(mev)
 }
 
