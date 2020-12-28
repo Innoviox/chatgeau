@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/graphic"
@@ -30,6 +31,8 @@ func (g *Game) spawnEnemy(typ rune) {
 	geom := geometry.NewSphere(0.2, 10, 10)
 	mat := material.NewStandard(math32.NewColor(enemy.mat))
 	mesh := graphic.NewMesh(geom, mat)
+
+	fmt.Println("enememy", geom.Indexed())
 
 	i, j := g.startIndex()
 	mesh.SetPosition(g.sqs[i][j].x, 0.5, g.sqs[i][j].y)

@@ -40,7 +40,7 @@ func (s Square) toVec() *math32.Vector3 {
 }
 
 func loadModel(path string) *core.Node {
-	fmt.Println(path)
+	//fmt.Println(path)
 	dec, err := obj.Decode("resources/models/"+path+".obj", "")
 	if err != nil {
 		fmt.Println(err)
@@ -49,8 +49,13 @@ func loadModel(path string) *core.Node {
 
 	o := &dec.Objects[0]
 	g, _ := dec.NewGeometry(o)
+	g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
+		fmt.Println(vA, vB, vC)
+		return false
+	})
+	return nil
 	for idx := 0; idx < g.GroupCount(); idx++ {
-		fmt.Println(idx, g.GroupAt(idx))
+		fmt.Println(idx, g.GroupAt(idx), g.Indexed())
 	}
 
 	m, _ := dec.NewMesh(o)
