@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
@@ -9,7 +8,6 @@ import (
 	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
-	"github.com/g3n/engine/window"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -29,28 +27,6 @@ type Game struct {
 	spawner  *Spawner
 
 	lives    int
-}
-
-func (g *Game) setupGui() {
-	w, h := g.app.GetSize()
-	g.panel = gui.NewPanel(float32(w), float32(h))
-	g.panel.SetBorders(1, 1, 1, 1)
-
-	g.scene.Add(g.panel)
-
-	lives := gui.NewLabel(fmt.Sprintf("Lives: %d", g.lives))
-	lives.SetPosition(0, 0)
-	lives.SetBorders(1, 1, 1, 1)
-	lives.SetFontSize(20)
-	lives.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
-	g.panel.Add(lives)
-
-	g.app.Subscribe(window.OnWindowSize, g.onResize)
-	g.onResize("", nil)
-}
-
-func (g *Game) updateGui() {
-	g.panel.ChildAt(0).(*gui.Label).SetText(fmt.Sprintf("Lives: %d", g.lives))
 }
 
 func (g *Game) onResize(evname string, ev interface{}) {
@@ -160,9 +136,9 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 }
 
 func (g *Game) onCursor(evname string, ev interface{}) {
-	mev := ev.(*window.CursorEvent)
+	//mev := ev.(*window.CursorEvent)
 	//fmt.Println(mev.Xpos, mev.Ypos)
-	g.getCursorSquare(mev)
+	//g.getCursorSquare(mev)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
