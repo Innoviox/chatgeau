@@ -161,13 +161,13 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 
 func (g *Game) onCursor(evname string, ev interface{}) {
 	mev := ev.(*window.CursorEvent)
-	fmt.Println(mev.Xpos, mev.Ypos)
-	//getCursorSquare(cev)
+	//fmt.Println(mev.Xpos, mev.Ypos)
+	g.getCursorSquare(mev)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
-	mev := ev.(*window.MouseEvent)
-	fmt.Println(mev.Xpos, mev.Ypos)
+	//mev := ev.(*window.MouseEvent)
+	//fmt.Println(mev.Xpos, mev.Ypos)
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {

@@ -71,6 +71,8 @@ type Spawn struct {
 	time  float64
 }
 
-func getCursorSquare(ev *window.CursorEvent) (int, int) {
+func (g *Game) getCursorSquare(ev *window.CursorEvent) (int, int) {
+	w, h := g.app.GetSize()
+	fmt.Println(math.Hypot(float64(ev.Xpos) - float64(w)/2, float64(g.cam.Position().Z)), math.Hypot(float64(ev.Ypos) - float64(h)/2, float64(g.cam.Position().Z)))
 	return 0, 0
 }
