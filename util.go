@@ -77,6 +77,11 @@ func (g *Game) getCursorSquare(ev *window.CursorEvent) (int, int) {
 	return 0, 0
 }
 
+// go. why do you not implement this. fuck you
+func reversed(s [4]string) [4]string {
+	return [4]string{ s[3], s[2], s[1], s[0] }
+}
+
 func loadPicture(layers [4]string) {
 
 }

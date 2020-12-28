@@ -32,28 +32,28 @@ func (g *Game) setupGui() {
 	g.panel.Add(lives)
 
 	money := gui.NewLabel(fmt.Sprintf("Money: %d", g.money))
-	money.SetPosition(0, 20)
+	money.SetPosition(0, 30)
 	money.SetBorders(1, 1, 1, 1)
 	money.SetFontSize(20)
 	money.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
 	g.panel.Add(money)
 
-	for k, v := range towers {
-		l12 := gui.NewImageLabel("label12")
-		img, err := gui.NewImage(a.DirData() + "/images/tiger1.jpg")
-		if err != nil {
-			a.Log().Fatal("%s", err)
+	y := float32(60)
+
+	for k, _ := range towers {
+		for _, name := range reversed(k) {
+			if name == "" {
+				continue
+			}
+
+			lbl := gui.NewImageLabel("")
+			img, _ := gui.NewImage("resources/sprites_side/" + name + ".png")
+			lbl.SetImage(img)
+			lbl.SetPosition(0, y)
+			g.panel.Add(lbl)
+
+			y += 30
 		}
-		img.SetContentAspectWidth(64)
-		l12.SetImage(img)
-		l12.SetPosition(460, l8.Position().Y)
-		l12.SetFontSize(28)
-		l12.SetColor(math32.NewColor("red"))
-		l12.SetBorders(1, 1, 1, 1)
-		l12.SetBordersColor(math32.NewColor("white"))
-		l12.SetPaddings(4, 20, 4, 20)
-		l12.SetSize(100, 100)
-		a.DemoPanel().Add(l12)
 	}
 
 	g.app.Subscribe(window.OnWindowSize, g.onResize)
