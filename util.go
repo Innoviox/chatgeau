@@ -46,11 +46,15 @@ func loadModel(path string) *core.Node {
 		return nil
 	}
 
+	fmt.Println(dec.Materials)
+
 	group, err := dec.NewGroup()
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
+
+	group.SetName(path)
 
 	return group
 }

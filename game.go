@@ -72,8 +72,8 @@ func (g *Game) loadLevel(path string) error {
 
 	midx, midz := float32(len(g.sqs)) / 2, float32(len(g.sqs[0])) / 2
 
-	//g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
-	g.cam.SetPosition(0, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1) / 2, 0)
+	g.cam.SetPosition(midx, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1), midz)
+	//g.cam.SetPosition(0, float32(Max(len(g.sqs[0]), len(g.sqs)) + 1) / 2, 0)
 	g.cam.LookAt(&math32.Vector3{midx, 0, midz}, &math32.Vector3{0, 1, 0})
 
 	//g.cam.RotateX(0.5)
@@ -158,7 +158,7 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 	}
 
 	obj := intersects[0].Object
-	fmt.Println(obj)
+	fmt.Println(obj.Name())
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
