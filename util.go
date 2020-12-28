@@ -40,17 +40,21 @@ func (s Square) toVec() *math32.Vector3 {
 }
 
 func loadModel(path string) *core.Node {
+	fmt.Println(path)
 	dec, err := obj.Decode("resources/models/"+path+".obj", "")
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 
-	//o := &dec.Objects[0]
-	//g, _ := dec.NewGeometry(o)
-	//for idx := 0; idx < g.GroupCount(); idx++ {
-	//	fmt.Println(idx, g.GroupAt(idx).Matid)
-	//}
+	o := &dec.Objects[0]
+	g, _ := dec.NewGeometry(o)
+	for idx := 0; idx < g.GroupCount(); idx++ {
+		fmt.Println(idx, g.GroupAt(idx))
+	}
+
+	m, _ := dec.NewMesh(o)
+	fmt.Println(m.GetMaterial(0))
 
 	group, err := dec.NewGroup()
 	if err != nil {
