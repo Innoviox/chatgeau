@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
@@ -158,7 +157,8 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 	}
 
 	obj := intersects[0].Object
-	fmt.Println(obj.Name())
+	//fmt.Println(obj.Name())
+	g.scene.Remove(obj)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
