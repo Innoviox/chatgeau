@@ -31,8 +31,7 @@ func main() {
 
 	// initialize game
 	g := Game { app: application, scene: scene, cam: cam, animator: new(Animator), lives: 20, money: 600 }
-	g.setupGui()
-	g.animator.init()
+	g.init()
 
 	// set up level
 	if err := g.loadLevel("forest"); err != nil {

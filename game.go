@@ -5,6 +5,7 @@ import (
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/experimental/collision"
 	"github.com/g3n/engine/gls"
 	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/math32"
@@ -20,6 +21,7 @@ type Game struct {
 
 	scene    *core.Node // todo graphics subvariable
 	cam      *camera.Camera
+	rc       *collision.Raycaster
 
 	panel    *gui.Panel
 
@@ -30,6 +32,15 @@ type Game struct {
 
 	lives    int
 	money    int
+}
+
+func (g *Game) init() {
+	g.setupGui()
+	g.animator.init()
+
+	g.rc = collision.NewRaycaster(&math32.Vector3{}, &math32.Vector3{})
+	g.rc.LinePrecision = 0.05
+	g.rc.PointPrecision = 0.05
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -135,14 +146,19 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 func (g *Game) onCursor(evname string, ev interface{}) {
 	mev := ev.(*window.CursorEvent)
 
-	w, h := g.app.GetSize()
-	vec := math32.NewVector3(mev.Xpos / float32(w), mev.Ypos / float32(h), 1)
+	width, height := g.app.GetSize()
+	x := 2*(mev.Xpos/float32(width)) - 1
+	y := -2*(mev.Ypos/float32(height)) + 1
 
-	//raycaster := collision.NewRaycaster(&g.cam.Position(), vec)
+	g.rc.SetFromCamera(g.cam, x, y)
 
-	//raycaster.IntersectObjects()
-	fmt.Println(vec)
-	//g.getCursorSquare(mev)
+	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
+	if len(intersects) == 0 {
+		return
+	}
+
+	obj := intersects[0].Object
+	fmt.Println(obj)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
