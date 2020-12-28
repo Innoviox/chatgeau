@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/window"
@@ -49,17 +50,24 @@ func loadModel(path string) *core.Node {
 
 	o := &dec.Objects[0]
 	g, _ := dec.NewGeometry(o)
-	g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
-		fmt.Println(vA, vB, vC)
-		return false
-	})
-	return nil
-	for idx := 0; idx < g.GroupCount(); idx++ {
-		fmt.Println(idx, g.GroupAt(idx), g.Indexed())
+	//m, _ := dec.NewMesh(o)
+	m := graphic.NewMesh(g, nil)
+	for i := 0; i < g.GroupCount(); i++) {
+		group := g.GroupAt(i)
+		name := o.Materials
+		mat := dec.Materials
+		var name string
 	}
 
-	m, _ := dec.NewMesh(o)
-	fmt.Println(m.GetMaterial(0))
+	i := 0
+	g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
+		//fmt.Println(vA, vB, vC)
+		fmt.Println(i, m.GetMaterial(i))
+		i += 3
+		return false
+	})
+
+	return nil
 
 	group, err := dec.NewGroup()
 	if err != nil {
