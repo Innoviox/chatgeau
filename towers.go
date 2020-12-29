@@ -15,7 +15,11 @@ var towers = map[[4]string]Tower {
 func (g *Game) buyTower(tower [4]string) {
 	g.holding = towers[tower]
 
+	for _, n := range g.holdmodel {
+		g.scene.Remove(n)
+	}
 	g.holdmodel = g.holdmodel[0:0]
+
 	for i := 0; tower[i] != ""; i++ {
 		m := loadModel(tower[i])
 

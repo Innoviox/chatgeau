@@ -163,14 +163,18 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 
 	g.rc.SetFromCamera(g.cam, x, y)
 
+
+
 	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
 	if len(intersects) == 0 {
 		return
 	}
 
-	if g.holding.name != "" {
-		for _, n := range g.holdmodel {
+	pos := intersects[0].Object.Parent().Position()
 
+	if g.holding.name != "" {
+		for i, n := range g.holdmodel {
+			n.SetPosition(pos.X, float32(i), pos.Y)
 		}
 	}
 }
