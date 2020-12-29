@@ -54,7 +54,7 @@ func (g *Game) init() {
 
 	g.validbox = graphic.NewMesh(geometry.NewBox(1, 0.1, 1),
 								 material.NewStandard(math32.NewColor("Green")))
-	g.scene.Add(g.validbox)
+	//g.scene.Add(g.validbox)
 }
 
 func (g *Game) loadLevel(path string) error {

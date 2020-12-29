@@ -39,8 +39,11 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 	if g.holding.name != "" {
 		g.validbox.SetPosition(pos.X, 0.1, pos.Z)
 
-		for i, n := range g.holdmodel {
-			n.SetPosition(pos.X, float32(i) + 0.1, pos.Z)
+		var y float32 = 0.1
+
+		for _, n := range g.holdmodel {
+			n.SetPosition(pos.X, y, pos.Z)
+			y += n.BoundingBox().Max.Y
 		}
 	}
 }
