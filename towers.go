@@ -16,6 +16,10 @@ func (g *Game) buyTower(tower [4]string) {
 	g.holding = towers[tower]
 
 	g.holdmodel = g.holdmodel[0:0]
+	for i := 0; tower[i] != ""; i++ {
+		m := loadModel(tower[i])
 
-
+		g.holdmodel = append(g.holdmodel, m)
+		g.scene.Add(m)
+	}
 }

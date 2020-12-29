@@ -169,7 +169,9 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 	}
 
 	if g.holding.name != "" {
+		for _, n := range g.holdmodel {
 
+		}
 	}
 }
 
