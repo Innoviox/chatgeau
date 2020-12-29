@@ -61,10 +61,14 @@ func loadModel(path string) *core.Node {
 
 	mats := m.Materials()
 
-	m1 := m.GetMaterial(30).GetMaterial()
-	m2 := m.GetMaterial(33).GetMaterial()
+	m1 := m.GetMaterial(30)
+	m2 := m.GetMaterial(33)
 
-	
+	fmt.Println(mats)
+	fmt.Println("\t", mats[0].IMaterial())
+	fmt.Println("\t", mats[1].IMaterial())
+	fmt.Println(m1)
+	fmt.Println(m2)
 
 	//i := 0
 	//g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
