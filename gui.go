@@ -44,9 +44,7 @@ func (g *Game) setupGui() {
 		btn := gui.NewButton(fmt.Sprintf("$%d - %s", v.cost, v.name))
 		btn.SetPosition(5, y)
 
-		btn.Subscribe(gui.OnClick, func(name string, ev interface{}) {
-			g.buyTower(k)
-		})
+		btn.Subscribe(gui.OnClick, g.buyTower(k))
 
 		g.panel.Add(btn)
 
