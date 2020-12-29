@@ -112,7 +112,10 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 	p := t.position()
 	bullet.SetPosition(p.X, t.height(), p.Z)
 
-	g.animateSingle(bullet, bullet.Position(), g.enemies[0].Position(), func() {
+	// todo target frontmost enemy
+	// todo range??
+	// todo enemy lives
+	g.bulletAnimator.animateSingle(bullet, bullet.Position(), g.enemies[0].Position(), func() {
 		//fmt.Println("done")
 		g.scene.Remove(bullet)
 	}, 0.1)

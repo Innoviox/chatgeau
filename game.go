@@ -29,9 +29,10 @@ type Game struct {
 	panel     *gui.Panel
 
 	// handlers
-	animator  *Animator
-	spawner   *Spawner
-	shooter   *Shooter
+	enemyAnimator  *Animator
+	bulletAnimator *Animator
+	spawner        *Spawner
+	shooter        *Shooter
 
 	// internals
 	sqs       [][]Square
@@ -49,7 +50,8 @@ type Game struct {
 
 func (g *Game) init() {
 	g.setupGui()
-	g.animator.init()
+	g.enemyAnimator.init()
+	g.bulletAnimator.init()
 	g.shooter.init()
 
 	g.rc = collision.NewRaycaster(&math32.Vector3{}, &math32.Vector3{})
@@ -187,7 +189,8 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	rend.Render(g.scene, g.cam)
 
 	// update game state
-	g.animator.update(deltaTime.Seconds())
+	g.enemies = g.enemyAnimator.update(deltaTime.Seconds())
+
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
 

@@ -31,7 +31,7 @@ func (g *Game) spawnEnemy(typ rune) {
 	mesh.SetPosition(g.sqs[i][j].x, 0.5, g.sqs[i][j].y)
 
 	kf, v := g.path(enemy.speed)
-	g.animate(mesh, kf, v, func() {
+	g.enemyAnimator.animate(mesh, kf, v, func() {
 		g.lives--
 		g.updateGui()
 		g.scene.Remove(mesh)
