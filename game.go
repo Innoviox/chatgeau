@@ -6,11 +6,9 @@ import (
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/experimental/collision"
-	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/gls"
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/gui"
-	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
 	"io/ioutil"
@@ -58,10 +56,6 @@ func (g *Game) init() {
 	g.rc = collision.NewRaycaster(&math32.Vector3{}, &math32.Vector3{})
 	g.rc.LinePrecision = 0.05
 	g.rc.PointPrecision = 0.05
-
-	g.validbox = graphic.NewMesh(geometry.NewBox(1, 0.1, 1),
-								 material.NewStandard(math32.NewColor("Green")))
-	//g.scene.Add(g.validbox)
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -193,6 +187,7 @@ func (g *Game) updateCollisions(b *graphic.Mesh) {
 			g.health[e]--
 			if g.health[e] == 0 {
 				// todo bullet health (penetration)
+				// todo money from kills
 				g.scene.Remove(e)
 				add = false
 				g.enemyAnimator.removeTarget(e)

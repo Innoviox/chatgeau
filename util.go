@@ -107,3 +107,14 @@ func sphere(radius float64, color string) *graphic.Mesh {
 	return graphic.NewMesh(geometry.NewSphere(radius, 10, 10),
 		   			       material.NewStandard(math32.NewColor(color)))
 }
+
+func (g *Game) updateValid(radius float64) {
+	if g.validbox != nil {
+		g.scene.Remove(g.validbox)
+	}
+
+	g.validbox = graphic.NewMesh(geometry.NewCylinder(radius, 0.5, 100, 100, true, true),
+		material.NewStandard(math32.NewColor("Green")))
+	g.validbox.SetVisible(false)
+	g.scene.Add(g.validbox)
+}
