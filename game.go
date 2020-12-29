@@ -163,8 +163,6 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 
 	g.rc.SetFromCamera(g.cam, x, y)
 
-
-
 	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
 	if len(intersects) == 0 {
 		return
