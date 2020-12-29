@@ -15,6 +15,12 @@ type Tower struct {
 var towers = map[[4]string]Tower {
 	[4]string{"weapon_cannon"}: { 1, 1, 100, "cannon" },
 	[4]string{"towerRound_bottomA", "towerRound_middleA", "towerRound_roofA"}: { 2, 0.5, 200, "round_A" },
+	[4]string{"towerRound_bottomB", "towerRound_middleB", "towerRound_roofB"}: { 2, 0.5, 200, "round_B" },
+	[4]string{"towerRound_bottomC", "towerRound_middleC", "towerRound_roofC"}: { 2, 0.5, 200, "round_C" },
+	[4]string{"towerSquare_bottomA", "towerSquare_middleA", "towerSquare_roofA"}: { 2, 0.5, 200, "square_A" },
+	[4]string{"towerSquare_bottomB", "towerSquare_middleB", "towerSquare_roofB"}: { 2, 0.5, 200, "square_B" },
+	[4]string{"towerSquare_bottomC", "towerSquare_middleC", "towerSquare_roofC"}: { 2, 0.5, 200, "square_C" },
+
 }
 
 func (g *Game) buyTower(tower [4]string) core.Callback {
