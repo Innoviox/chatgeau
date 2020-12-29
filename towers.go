@@ -68,6 +68,20 @@ type TowerAnim struct {
 	time  float64
 }
 
+func (t *TowerAnim) height() float32 {
+	var y float32 = 0
+
+	for _, n := range t.model {
+		y += n.BoundingBox().Max.Y
+	}
+
+	return y
+}
+
+func (t *TowerAnim) position() math32.Vector3 {
+	return t.model[0].Position()
+}
+
 type Shooter struct {
 	towers []*TowerAnim
 }
@@ -82,14 +96,22 @@ func (s *Shooter) add(tower Tower, model []*core.Node) {
 	s.towers = append(s.towers, &anim)
 }
 
-func (s *Shooter) update(delta float64, shoot func(rune)) {
-	for _, t := range s.towers {
-		t.time += delta
-		if t.time > 1 / t.tower.speed {
-			t.time = 0
-			shoot('R')
-			// todo fire
+func (s *Shooter) update(delta float64, shoot func(*TowerAnim)) {
+	for _, anim := range s.towers {
+		anim.time += delta
+		if anim.time > 1 / anim.tower.speed {
+			anim.time = 0
+			shoot(anim)
 		}
 	}
 }
 
+func (g *Game) spawnBullet(t *TowerAnim) {
+	bullet := sphere(0.1, "Yellow")
+
+	p := t.position()
+	bullet.SetPosition(p.X, t.height(), p.Z)
+
+	g.bullets = append(g.bullets, bullet)
+	g.scene.Add(bullet)
+}

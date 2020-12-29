@@ -38,6 +38,8 @@ type Game struct {
 	holding   Tower
 	holdmodel []*core.Node
 	validbox  *graphic.Mesh
+	enemies   []*graphic.Mesh
+	bullets   []*graphic.Mesh
 
 
 	// variables
@@ -187,7 +189,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// update game state
 	g.animator.update(deltaTime.Seconds())
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
-	g.shooter.update(deltaTime.Seconds(), g.spawnEnemy)
+	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
 
 	//g.cam.RotateY(0.01)
 	//fmt.Println(g.cam.Rotation())

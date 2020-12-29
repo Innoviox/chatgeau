@@ -3,10 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/g3n/engine/animation"
-	"github.com/g3n/engine/geometry"
-	"github.com/g3n/engine/graphic"
-	"github.com/g3n/engine/material"
-	"github.com/g3n/engine/math32"
 	"io/ioutil"
 	"math"
 	"strings"
@@ -28,9 +24,7 @@ func (g *Game) spawnEnemy(typ rune) {
 		return
 	}
 
-	geom := geometry.NewSphere(0.2, 10, 10)
-	mat := material.NewStandard(math32.NewColor(enemy.mat))
-	mesh := graphic.NewMesh(geom, mat)
+	mesh := sphere(0.2, enemy.mat)
 
 	mesh.SetName(fmt.Sprintf("%c", typ))
 
@@ -51,8 +45,9 @@ func (g *Game) spawnEnemy(typ rune) {
 		g.lives--
 		g.updateGui()
 		g.scene.Remove(mesh)
-	}})
+	}, mesh})
 
+	g.enemies = append(g.enemies, mesh)
 	g.scene.Add(mesh)
 }
 

@@ -1,10 +1,14 @@
 package main
 
-import "github.com/g3n/engine/animation"
+import (
+	"github.com/g3n/engine/animation"
+	"github.com/g3n/engine/graphic"
+)
 
 type Animation struct {
 	*animation.Animation
 	callback func()
+	target *graphic.Mesh
 }
 
 type Animator struct {

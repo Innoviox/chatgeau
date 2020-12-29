@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/geometry"
+	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/loader/obj"
+	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/window"
 	"math"
@@ -100,12 +103,7 @@ func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
 	return intersects[0].Object.Parent().Position()
 }
 
-func height(tower []*core.Node) float32 {
-	var y float32 = 0
-
-	for _, n := range tower {
-		y += n.BoundingBox().Max.Y
-	}
-
-	return y
+func sphere(radius float64, color string) *graphic.Mesh {
+	return graphic.NewMesh(geometry.NewSphere(radius, 10, 10),
+		   			       material.NewStandard(math32.NewColor(color)))
 }
