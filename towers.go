@@ -58,6 +58,10 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 }
 
 func (g *Game) placeHolding() {
+	if len(g.holdmodel) == 0 {
+		return
+	}
+
 	g.valid.SetVisible(false)
 
 	var p = g.holdmodel[0].Position()
