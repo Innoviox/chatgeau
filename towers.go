@@ -123,8 +123,9 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 
 	g.bulletAnimator.animateSingle(bullet, bullet.Position(), target.Position(), func() {
 		//fmt.Println("done")
+		g.updateCollisions(bullet)
 		g.scene.Remove(bullet)
-	}, 0.1)
+	}, 0.05)
 
 	g.bullets = append(g.bullets, bullet)
 	g.scene.Add(bullet)

@@ -180,27 +180,17 @@ func (g *Game) onClick(evname string, ev interface{}) {
 	}
 }
 
-func (g *Game) updateCollisions() {
+func (g *Game) updateCollisions(b *graphic.Mesh) {
 	for _, e := range g.enemies {
-		for _, b := range g.bullets {
-			var bulletPosition math32.Vector3 = b.Position()
+		//for _, b := range g.bullets {
+			bulletPosition, enemyPosition := b.Position(), e.Position()
 
-			if e.Position().DistanceTo(&bulletPosition) {
-				
+			fmt.Println(bulletPosition, enemyPosition, enemyPosition.DistanceTo(&bulletPosition))
+
+			if enemyPosition.DistanceTo(&bulletPosition) < 0.1 {
+				fmt.Println("collision")
 			}
-		}
-		// imagine the day when i could do this
-		//c := collision.CheckConvex(e.GetGeometry(), b.GetGeometry())
-
-		//e.GetGeometry().ReadVertices(func(vertex math32.Vector3) bool {
-		//	g.rc.SetFromCamera(g.cam, vertex.X, vertex.Z)
-		//
-		//	intersects := g.rc.IntersectObjects(g.bullets, true)
-		//
-		//
-		//	return false
-		//})
-
+		//}
 	}
 }
 
@@ -219,7 +209,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
 
-	g.checkCollisions()
+	//g.updateCollisions()
 
 	//g.cam.RotateY(0.01)
 	//fmt.Println(g.cam.Rotation())
