@@ -12,10 +12,11 @@ import (
 var enemies = map[rune]struct {
 	mat   string // todo .obj enemies
 	speed float32
+	lives int
 } {
-	'B': { "DarkBlue", 1 },
-	'R': { "DarkRed", 2 },
-	'G': { "DarkGreen", 3 },
+	'B': { "DarkBlue", 1, 1 },
+	'R': { "DarkRed", 2, 2 },
+	'G': { "DarkGreen", 3, 3 },
 }
 
 func (g *Game) spawnEnemy(typ rune) {
