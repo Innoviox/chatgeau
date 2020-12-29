@@ -174,7 +174,7 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 
 	if g.holding.name != "" {
 		for i, n := range g.holdmodel {
-			n.SetPosition(pos.X, float32(i), pos.Y)
+			n.SetPosition(pos.X, float32(i), pos.Z)
 		}
 	}
 }
