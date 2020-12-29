@@ -190,6 +190,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 
 	// update game state
 	g.enemies = g.enemyAnimator.update(deltaTime.Seconds())
+	g.bullets = g.bulletAnimator.update(deltaTime.Seconds())
 
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
