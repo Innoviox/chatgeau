@@ -95,7 +95,14 @@ func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
 
 	g.rc.SetFromCamera(g.cam, x, y)
 
-	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
+	c := make([]core.INode, 0)
+	for _, n := range g.scene.Children() {
+		if n != g.valid {
+			c = append(c, n)
+		}
+	}
+
+	intersects := g.rc.IntersectObjects(c, true)
 	if len(intersects) == 0 {
 		return *math32.NewVector3(-1000, 0, 0)
 	}

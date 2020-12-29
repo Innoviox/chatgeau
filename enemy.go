@@ -5,7 +5,6 @@ import (
 	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/math32"
 	"io/ioutil"
-	"math"
 	"strings"
 )
 
@@ -98,7 +97,7 @@ func loadSpawns(path string) *Spawner {
 			s.spawns = append(s.spawns, Spawn{ char, t })
 			t += 0.2 // todo softcode
 		}
-		t = math.Round(t) + 1
+		t = float64(int(t - 0.2) + 1)
 	}
 
 	return s
