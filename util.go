@@ -47,9 +47,9 @@ func loadModel(path string) *core.Node {
 		return nil
 	}
 
-	o := &dec.Objects[0]
+	//o := &dec.Objects[0]
 	//g, _ := dec.NewGeometry(o)
-	m, _ := dec.NewMesh(o)
+	//m, _ := dec.NewMesh(o)
 	//fmt.Println(m.Materials()[0].IMaterial().GetMaterial().Side())
 	//m := graphic.NewMesh(g, nil)
 	//for i := 0; i < g.GroupCount(); i++) {
@@ -59,16 +59,16 @@ func loadModel(path string) *core.Node {
 	//	var name string
 	//}
 
-	mats := m.Materials()
-
-	m1 := m.GetMaterial(30)
-	m2 := m.GetMaterial(33)
-
-	fmt.Println(mats)
-	fmt.Println("\t", mats[0].IMaterial())
-	fmt.Println("\t", mats[1].IMaterial())
-	fmt.Println(m1)
-	fmt.Println(m2)
+	//mats := m.Materials()
+	//
+	//m1 := m.GetMaterial(30)
+	//m2 := m.GetMaterial(33)
+	//
+	//fmt.Println(mats)
+	//fmt.Println("\t", mats[0].IMaterial())
+	//fmt.Println("\t", mats[1].IMaterial())
+	//fmt.Println(m1)
+	//fmt.Println(m2)
 
 	//i := 0
 	//g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
@@ -78,7 +78,7 @@ func loadModel(path string) *core.Node {
 	//	return false
 	//})
 
-	return nil
+	//return nil
 
 	group, err := dec.NewGroup()
 	if err != nil {

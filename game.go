@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
@@ -64,6 +65,10 @@ func (g *Game) loadLevel(path string) error {
 			m := loadModel(model.name)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, model.roty, 0)
+			m.SetName(fmt.Sprintf("m %s %d %d", path, i, j))
+			for k, c := range m.Children() {
+				c.SetName(fmt.Sprintf("%s %d %d %d", path, i, j, k))
+			}
 
 			g.scene.Add(m)
 		}
@@ -156,12 +161,15 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 		return
 	}
 
+	fmt.Println(len(intersects))
+
 	//obj := intersects[0].Object
-	////fmt.Println(obj.Name())
+	//fmt.Println(obj.Name())
 	//g.scene.Remove(obj)
 
-	for _, obj := range intersects {
-		g.scene.Remove(obj.Object)
+	for i, obj := range intersects {
+		o := obj.Object
+		fmt.Println(i, o.Name(), o.Position(), o.BoundingBox())
 	}
 }
 
