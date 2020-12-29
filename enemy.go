@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/g3n/engine/animation"
 	"io/ioutil"
 	"math"
 	"strings"
@@ -28,24 +27,15 @@ func (g *Game) spawnEnemy(typ rune) {
 
 	mesh.SetName(fmt.Sprintf("%c", typ))
 
-	//fmt.Println("enememy", geom.Indexed())
-
 	i, j := g.startIndex()
 	mesh.SetPosition(g.sqs[i][j].x, 0.5, g.sqs[i][j].y)
 
 	kf, v := g.path(enemy.speed)
-
-	ch := animation.NewPositionChannel(mesh)
-	ch.SetBuffers(kf, v)
-
-	anim := animation.NewAnimation()
-	anim.AddChannel(ch)
-	anim.SetPaused(false)
-	g.animator.add(&Animation{anim, func() {
+	g.animate(mesh, kf, v, func() {
 		g.lives--
 		g.updateGui()
 		g.scene.Remove(mesh)
-	}, mesh})
+	})
 
 	g.enemies = append(g.enemies, mesh)
 	g.scene.Add(mesh)

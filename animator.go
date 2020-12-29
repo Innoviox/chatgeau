@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/graphic"
+	"github.com/g3n/engine/math32"
 )
 
 type Animation struct {
@@ -34,4 +35,24 @@ func (a *Animator) update(delta float64) {
 
 func (a *Animator) add(anim *Animation) {
 	a.anims = append(a.anims, anim)
+}
+
+func (g *Game) animate(mesh *graphic.Mesh, kf, v math32.ArrayF32, callback func()) {
+	ch := animation.NewPositionChannel(mesh)
+	ch.SetBuffers(kf, v)
+
+	anim := animation.NewAnimation()
+	anim.AddChannel(ch)
+	anim.SetPaused(false)
+	g.animator.add(&Animation{anim, callback, mesh})
+}
+
+func (g *Game) animateSingle(mesh *graphic.Mesh, from, to math32.Vector3, callback func()) {
+	kf := math32.NewArrayF32(0, 2)
+	v := math32.NewArrayF32(0, 6)
+
+	kf.Append(0, 1)
+	v.AppendVector3(&from, &to)
+
+	g.animate(mesh, kf, v, callback)
 }

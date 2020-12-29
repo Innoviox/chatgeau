@@ -112,6 +112,10 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 	p := t.position()
 	bullet.SetPosition(p.X, t.height(), p.Z)
 
+	g.animateSingle(bullet, bullet.Position(), g.enemies[0].Position(), func() {
+		//fmt.Println("done")
+	})
+
 	g.bullets = append(g.bullets, bullet)
 	g.scene.Add(bullet)
 }
