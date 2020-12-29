@@ -36,7 +36,7 @@ type Game struct {
 	sqs       [][]Square
 	holding   Tower
 	holdmodel []*core.Node
-	validbox  *graphic.Mesh
+	valid     *graphic.Mesh
 	enemies   []*graphic.Mesh
 	bullets   []*graphic.Mesh
 	health    map[*graphic.Mesh]int

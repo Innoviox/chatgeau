@@ -45,8 +45,8 @@ func (g *Game) buyTower(tower [4]string) core.Callback {
 
 func (g *Game) updateHolding(pos math32.Vector3) {
 	if g.holding.name != "" {
-		g.validbox.SetVisible(true)
-		g.validbox.SetPosition(pos.X, 0.1, pos.Z)
+		g.valid.SetVisible(true)
+		g.valid.SetPosition(pos.X, 0.1, pos.Z)
 
 		var y float32 = 0.1
 
@@ -58,7 +58,7 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 }
 
 func (g *Game) placeHolding() {
-	g.validbox.SetVisible(false)
+	g.valid.SetVisible(false)
 	g.shooter.add(g.holding, g.holdmodel)
 
 	g.holding   = *new(Tower)

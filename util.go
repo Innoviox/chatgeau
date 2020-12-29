@@ -109,12 +109,14 @@ func sphere(radius float64, color string) *graphic.Mesh {
 }
 
 func (g *Game) updateValid(radius float64) {
-	if g.validbox != nil {
-		g.scene.Remove(g.validbox)
+	if g.valid != nil {
+		g.scene.Remove(g.valid)
 	}
 
-	g.validbox = graphic.NewMesh(geometry.NewCylinder(radius, 0.5, 100, 100, true, true),
-		material.NewStandard(math32.NewColor("Green")))
-	g.validbox.SetVisible(false)
-	g.scene.Add(g.validbox)
+	mat := material.NewStandard(math32.NewColor("Green"))
+	mat.SetOpacity(0.3)
+
+	g.valid = graphic.NewMesh(geometry.NewCylinder(radius, 0.5, 100, 100, true, true), mat)
+	g.valid.SetVisible(false)
+	g.scene.Add(g.valid)
 }
