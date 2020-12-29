@@ -31,12 +31,14 @@ type Game struct {
 	// handlers
 	animator  *Animator
 	spawner   *Spawner
+	shooter   *Shooter
 
 	// internals
 	sqs       [][]Square
 	holding   Tower
 	holdmodel []*core.Node
 	validbox  *graphic.Mesh
+
 
 	// variables
 	lives     int
@@ -46,6 +48,7 @@ type Game struct {
 func (g *Game) init() {
 	g.setupGui()
 	g.animator.init()
+	g.shooter.init()
 
 	g.rc = collision.NewRaycaster(&math32.Vector3{}, &math32.Vector3{})
 	g.rc.LinePrecision = 0.05
@@ -169,7 +172,7 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 
 func (g *Game) onClick(evname string, ev interface{}) {
 	if pos := g.getCurrentIntersect(ev); pos.X != -1000 {
-		g.placeTower(pos)
+		g.placeHolding()
 	}
 }
 
@@ -184,6 +187,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// update game state
 	g.animator.update(deltaTime.Seconds())
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
+	g.shooter.update(deltaTime.Seconds(), g.spawnEnemy)
 
 	//g.cam.RotateY(0.01)
 	//fmt.Println(g.cam.Rotation())

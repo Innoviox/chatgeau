@@ -1,5 +1,12 @@
 package main
 
+import "github.com/g3n/engine/animation"
+
+type Animation struct {
+	*animation.Animation
+	callback func()
+}
+
 type Animator struct {
 	anims   []*Animation
 }

@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/math32"
 )
 
 type Tower struct {
-	speed float32
+	speed float64
 	damage float32
 	cost int
 	name string
@@ -15,11 +16,11 @@ type Tower struct {
 var towers = map[[4]string]Tower {
 	[4]string{"weapon_cannon"}: { 1, 1, 100, "cannon" },
 	[4]string{"towerRound_bottomA", "towerRound_middleA", "towerRound_roofA"}: { 2, 0.5, 200, "round_A" },
-	[4]string{"towerRound_bottomB", "towerRound_middleB", "towerRound_roofB"}: { 2, 0.5, 200, "round_B" },
-	[4]string{"towerRound_bottomC", "towerRound_middleC", "towerRound_roofC"}: { 2, 0.5, 200, "round_C" },
-	[4]string{"towerSquare_bottomA", "towerSquare_middleA", "towerSquare_roofA"}: { 2, 0.5, 200, "square_A" },
-	[4]string{"towerSquare_bottomB", "towerSquare_middleB", "towerSquare_roofB"}: { 2, 0.5, 200, "square_B" },
-	[4]string{"towerSquare_bottomC", "towerSquare_middleC", "towerSquare_roofC"}: { 2, 0.5, 200, "square_C" },
+	[4]string{"towerRound_bottomB", "towerRound_middleB", "towerRound_roofB"}: { 3, 0.5, 200, "round_B" },
+	[4]string{"towerRound_bottomC", "towerRound_middleC", "towerRound_roofC"}: { 4, 0.5, 200, "round_C" },
+	[4]string{"towerSquare_bottomA", "towerSquare_middleA", "towerSquare_roofA"}: { 5, 0.5, 200, "square_A" },
+	[4]string{"towerSquare_bottomB", "towerSquare_middleB", "towerSquare_roofB"}: { 6, 0.5, 200, "square_B" },
+	[4]string{"towerSquare_bottomC", "towerSquare_middleC", "towerSquare_roofC"}: { 7, 0.5, 200, "square_C" },
 
 }
 
@@ -54,7 +55,41 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 	}
 }
 
-func (g *Game) placeTower(pos math32.Vector3) {
+func (g *Game) placeHolding() {
+	g.shooter.add(g.holding, g.holdmodel)
+
 	g.holding   = *new(Tower)
 	g.holdmodel = g.holdmodel[0:0]
 }
+
+type TowerAnim struct {
+	tower Tower
+	model []*core.Node
+	time  float64
+}
+
+type Shooter struct {
+	towers []*TowerAnim
+}
+
+func (s *Shooter) init() {
+	s.towers = make([]*TowerAnim, 0)
+}
+
+func (s *Shooter) add(tower Tower, model []*core.Node) {
+	fmt.Println("added")
+	anim := TowerAnim { tower, model, 0 }
+	s.towers = append(s.towers, &anim)
+}
+
+func (s *Shooter) update(delta float64, shoot func(rune)) {
+	for _, t := range s.towers {
+		t.time += delta
+		if t.time > 1 / t.tower.speed {
+			t.time = 0
+			shoot('R')
+			// todo fire
+		}
+	}
+}
+

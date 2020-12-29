@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/g3n/engine/animation"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/loader/obj"
 	"github.com/g3n/engine/math32"
@@ -56,11 +55,6 @@ func loadModel(path string) *core.Node {
 	return group
 }
 
-type Animation struct {
-	*animation.Animation
-	callback func()
-}
-
 // go. why do you not implement this. fuck you
 func Max(x, y int) int {
 	if x < y { return y }
@@ -104,4 +98,14 @@ func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
 	}
 
 	return intersects[0].Object.Parent().Position()
+}
+
+func height(tower []*core.Node) float32 {
+	var y float32 = 0
+
+	for _, n := range tower {
+		y += n.BoundingBox().Max.Y
+	}
+
+	return y
 }
