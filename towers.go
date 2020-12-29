@@ -115,7 +115,13 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 	// todo target frontmost enemy
 	// todo range??
 	// todo enemy lives
-	g.bulletAnimator.animateSingle(bullet, bullet.Position(), g.enemies[0].Position(), func() {
+	target := g.farthestEnemy(bullet.Position())
+
+	if target == nil {
+		return
+	}
+
+	g.bulletAnimator.animateSingle(bullet, bullet.Position(), target.Position(), func() {
 		//fmt.Println("done")
 		g.scene.Remove(bullet)
 	}, 0.1)

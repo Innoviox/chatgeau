@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/g3n/engine/graphic"
+	"github.com/g3n/engine/math32"
 	"io/ioutil"
 	"math"
 	"strings"
@@ -39,6 +41,21 @@ func (g *Game) spawnEnemy(typ rune) {
 
 	g.enemies = append(g.enemies, mesh)
 	g.scene.Add(mesh)
+}
+
+func (g *Game) farthestEnemy(pos math32.Vector3) *graphic.Mesh {
+	var bestNode *graphic.Mesh = nil
+	var bestDist float32 = -1000
+
+	for _, e := range g.enemies {
+		p := e.Position()
+		if d := pos.DistanceTo(&p); d > bestDist {
+			bestDist = d
+			bestNode = e
+		}
+	}
+
+	return bestNode
 }
 
 type Spawner struct {
