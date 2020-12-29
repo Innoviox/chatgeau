@@ -181,38 +181,26 @@ func (g *Game) onClick(evname string, ev interface{}) {
 }
 
 func (g *Game) updateCollisions() {
-	bulletNodes := make([]core.Node, 0)
-	for _, n := range g.scene.Children() {
-		if n.
-	}
-
 	for _, e := range g.enemies {
+		for _, b := range g.bullets {
+			var bulletPosition math32.Vector3 = b.Position()
+
+			if e.Position().DistanceTo(&bulletPosition) {
+				
+			}
+		}
 		// imagine the day when i could do this
 		//c := collision.CheckConvex(e.GetGeometry(), b.GetGeometry())
 
-		e.GetGeometry().ReadVertices(func(vertex math32.Vector3) bool {
-			g.rc.SetFromCamera(g.cam, vertex.X, vertex.Z)
+		//e.GetGeometry().ReadVertices(func(vertex math32.Vector3) bool {
+		//	g.rc.SetFromCamera(g.cam, vertex.X, vertex.Z)
+		//
+		//	intersects := g.rc.IntersectObjects(g.bullets, true)
+		//
+		//
+		//	return false
+		//})
 
-
-			intersects := g.rc.IntersectObjects(g.bullets, true)
-
-
-			return false
-		})
-		//for (var vertexIndex = 0; vertexIndex < Player.geometry.vertices.length; vertexIndex++)
-		//{
-		//var localVertex = Player.geometry.vertices[vertexIndex].clone();
-		//var globalVertex = Player.matrix.multiplyVector3(localVertex);
-		//var directionVector = globalVertex.subSelf( Player.position );
-
-		//var ray = new THREE.Ray( Player.position, directionVector.clone().normalize() );
-		//var collisionResults = ray.intersectObjects( collidableMeshList );
-		//if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-		{
-		// a collision occurred... do something...
-		}
-		}
-		}
 	}
 }
 
