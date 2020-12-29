@@ -5,6 +5,7 @@ import (
 	"github.com/g3n/engine/app"
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/gui"
 	"github.com/g3n/engine/light"
 	"github.com/g3n/engine/math32"
@@ -37,6 +38,7 @@ func main() {
 		enemyAnimator: new(Animator),
 		bulletAnimator: new(Animator),
 		shooter: new(Shooter),
+		health: map[*graphic.Mesh]int{},
 		lives: 20,
 		money: 600,
 	}

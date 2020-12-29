@@ -41,6 +41,7 @@ type Game struct {
 	validbox  *graphic.Mesh
 	enemies   []*graphic.Mesh
 	bullets   []*graphic.Mesh
+	health    map[*graphic.Mesh]int
 
 
 	// variables
@@ -181,17 +182,29 @@ func (g *Game) onClick(evname string, ev interface{}) {
 }
 
 func (g *Game) updateCollisions(b *graphic.Mesh) {
+	enemies := make([]*graphic.Mesh, 0)
+
 	for _, e := range g.enemies {
-		//for _, b := range g.bullets {
-			bulletPosition, enemyPosition := b.Position(), e.Position()
+		bulletPosition, enemyPosition := b.Position(), e.Position()
 
-			fmt.Println(bulletPosition, enemyPosition, enemyPosition.DistanceTo(&bulletPosition))
+		add := true
 
-			if enemyPosition.DistanceTo(&bulletPosition) < 0.1 {
-				fmt.Println("collision")
+		if enemyPosition.DistanceTo(&bulletPosition) < 0.25 {
+			g.health[e]--
+			if g.health[e] == 0 {
+				// todo bullet health (penetration)
+				g.scene.Remove(e)
+				add = false
+				g.enemyAnimator.removeTarget(e)
 			}
-		//}
+		}
+
+		if add {
+			enemies = append(enemies, e)
+		}
 	}
+
+	g.enemies = enemies
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {

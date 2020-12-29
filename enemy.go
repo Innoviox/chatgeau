@@ -40,6 +40,7 @@ func (g *Game) spawnEnemy(typ rune) {
 		g.scene.Remove(mesh)
 	}, float64(enemy.speed))
 
+	g.health[mesh] = enemy.lives
 	g.enemies = append(g.enemies, mesh)
 	g.scene.Add(mesh)
 }

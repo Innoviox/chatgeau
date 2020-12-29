@@ -88,3 +88,15 @@ func (a *Animator) distanceLeft(mesh *graphic.Mesh) float64 {
 
 	return 0
 }
+
+func (a *Animator) removeTarget(mesh *graphic.Mesh) {
+	anims := make([]*Animation, 0)
+
+	for _, anim := range a.anims {
+		if anim.target != mesh {
+			anims = append(anims, anim)
+		}
+	}
+
+	a.anims = anims
+}
