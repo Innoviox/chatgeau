@@ -29,7 +29,7 @@ func (g *Game) spawnEnemy(typ rune) {
 
 	mesh.SetName(fmt.Sprintf("%c", typ))
 
-	i, j := g.startIndex()
+	i, j := g.indexOf('S')
 	mesh.SetPosition(g.sqs[i][j].x, 0.5, g.sqs[i][j].y)
 
 	kf, v := g.path(enemy.speed)
@@ -37,7 +37,7 @@ func (g *Game) spawnEnemy(typ rune) {
 		g.lives--
 		g.updateGui()
 		g.scene.Remove(mesh)
-	})
+	}, float64(enemy.speed))
 
 	g.enemies = append(g.enemies, mesh)
 	g.scene.Add(mesh)
@@ -50,6 +50,23 @@ func (g *Game) farthestEnemy(pos math32.Vector3) *graphic.Mesh {
 	for _, e := range g.enemies {
 		p := e.Position()
 		if d := pos.DistanceTo(&p); d > bestDist {
+			bestDist = d
+			bestNode = e
+		}
+	}
+
+	return bestNode
+}
+
+func (g *Game) frontEnemy() *graphic.Mesh {
+	var bestNode *graphic.Mesh = nil
+	var bestDist float64 = 1000
+
+	//i, j := g.indexOf('E')
+	//pos := math32.NewVector3(float32(i), 0.5, float32(j))
+
+	for _, e := range g.enemies {
+		if d := g.enemyAnimator.distanceLeft(e); d < bestDist {
 			bestDist = d
 			bestNode = e
 		}

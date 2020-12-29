@@ -109,12 +109,12 @@ func (g *Game) loadLevel(path string) error {
 	return nil
 }
 
-func (g *Game) startIndex() (int, int) {
+func (g *Game) indexOf(char rune) (int, int) {
 	i, j := 0, 0
 
 	for {
 		sq := g.sqs[i][j]
-		if sq.at == 'S' {
+		if sq.at == char {
 			return i, j
 		}
 
@@ -130,7 +130,7 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 	keyframes = math32.NewArrayF32(0, 2)
 	values = math32.NewArrayF32(0, 6)
 
-	i, j := g.startIndex()
+	i, j := g.indexOf('S')
 	horiz, vert := 1, 0 // todo down at start
 	end := false
 	n := 0

@@ -115,7 +115,7 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 	// todo target frontmost enemy
 	// todo range??
 	// todo enemy lives
-	target := g.farthestEnemy(bullet.Position())
+	target := g.frontEnemy()
 
 	if target == nil {
 		return
