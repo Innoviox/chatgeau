@@ -59,7 +59,9 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 
 func (g *Game) placeHolding() {
 	g.valid.SetVisible(false)
-	g.shooter.add(g.holding, g.holdmodel)
+
+	var p = g.holdmodel[0].Position()
+	g.shooter.add(g.holding, g.holdmodel, p.Clone())
 
 	g.holding   = *new(Tower)
 	g.holdmodel = g.holdmodel[0:0]
@@ -68,6 +70,7 @@ func (g *Game) placeHolding() {
 type TowerAnim struct {
 	tower Tower
 	model []*core.Node
+	pos   *math32.Vector3
 	time  float64
 }
 
@@ -81,10 +84,6 @@ func (t *TowerAnim) height() float32 {
 	return y
 }
 
-func (t *TowerAnim) position() math32.Vector3 {
-	return t.model[0].Position()
-}
-
 type Shooter struct {
 	towers []*TowerAnim
 }
@@ -93,9 +92,9 @@ func (s *Shooter) init() {
 	s.towers = make([]*TowerAnim, 0)
 }
 
-func (s *Shooter) add(tower Tower, model []*core.Node) {
+func (s *Shooter) add(tower Tower, model []*core.Node, pos *math32.Vector3) {
 	fmt.Println("added")
-	anim := TowerAnim { tower, model, 0 }
+	anim := TowerAnim { tower, model, pos, 0 }
 	s.towers = append(s.towers, &anim)
 }
 
@@ -112,7 +111,7 @@ func (s *Shooter) update(delta float64, shoot func(*TowerAnim)) {
 func (g *Game) spawnBullet(t *TowerAnim) {
 	bullet := sphere(0.1, "Yellow")
 
-	p := t.position()
+	p := t.pos
 	bullet.SetPosition(p.X, t.height(), p.Z)
 
 	// todo target frontmost enemy
