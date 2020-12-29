@@ -83,6 +83,25 @@ func reversed(s [4]string) [4]string {
 	return [4]string{ s[3], s[2], s[1], s[0] }
 }
 
-func loadPicture(layers [4]string) {
+func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
+	var x, y float32
 
+	width, height := g.app.GetSize()
+	switch mev := ev.(type) {
+	case window.MouseEvent:
+		x =  2 * (mev.Xpos / float32(width)) - 1
+		y = -2 * (mev.Ypos / float32(height)) + 1
+	case window.CursorEvent:
+		x =  2 * (mev.Xpos / float32(width)) - 1
+		y = -2 * (mev.Ypos / float32(height)) + 1
+	}
+
+	g.rc.SetFromCamera(g.cam, x, y)
+
+	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
+	if len(intersects) == 0 {
+		return *math32.NewVector3(-1000, 0, 0)
+	}
+
+	return intersects[0].Object.Parent().Position()
 }

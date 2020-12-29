@@ -13,7 +13,6 @@ import (
 	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
-	"github.com/g3n/engine/window"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -163,27 +162,15 @@ func (g *Game) path(speed float32) (keyframes, values math32.ArrayF32) {
 }
 
 func (g *Game) onCursor(evname string, ev interface{}) {
-	mev := ev.(*window.CursorEvent)
-
-	width, height := g.app.GetSize()
-	x :=  2 * (mev.Xpos / float32(width)) - 1
-	y := -2 * (mev.Ypos / float32(height)) + 1
-
-	g.rc.SetFromCamera(g.cam, x, y)
-
-	intersects := g.rc.IntersectObjects(g.scene.Children(), true)
-	if len(intersects) == 0 {
-		return
+	if pos := g.getCurrentIntersect(ev); pos.X != -1000 {
+		g.updateHolding(pos)
 	}
-
-	pos := intersects[0].Object.Parent().Position()
-
-	g.updateHolding(pos)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {
-	//mev := ev.(*window.MouseEvent)
-	//fmt.Println(mev.Xpos, mev.Ypos)
+	if pos := g.getCurrentIntersect(ev); pos.X != -1000 {
+		g.placeTower(pos)
+	}
 }
 
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
