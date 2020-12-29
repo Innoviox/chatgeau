@@ -40,10 +40,15 @@ func (g *Game) setupGui() {
 
 	y := float32(60)
 
-	for _, v := range towers {
-		lbl := gui.NewLabel(v.name)
-		lbl.SetPosition(0, y)
-		g.panel.Add(lbl)
+	for k, v := range towers {
+		btn := gui.NewButton(fmt.Sprintf("$%d - %s", v.cost, v.name))
+		btn.SetPosition(5, y)
+
+		btn.Subscribe(gui.OnClick, func(name string, ev interface{}) {
+			g.buyTower(k)
+		})
+
+		g.panel.Add(btn)
 
 		y += 30
 	}

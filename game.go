@@ -17,21 +17,27 @@ import (
 )
 
 type Game struct {
-	app      *app.Application
+	// graphics objects
+	app       *app.Application
+	scene     *core.Node
+	cam       *camera.Camera
+	rc        *collision.Raycaster
 
-	scene    *core.Node // todo graphics subvariable
-	cam      *camera.Camera
-	rc       *collision.Raycaster
+	// gui objects
+	panel     *gui.Panel
 
-	panel    *gui.Panel
+	// handlers
+	animator  *Animator
+	spawner   *Spawner
 
-	sqs      [][]Square
+	// internals
+	sqs       [][]Square
+	holding   Tower
+	holdmodel []*core.Node
 
-	animator *Animator
-	spawner  *Spawner
-
-	lives    int
-	money    int
+	// variables
+	lives     int
+	money     int
 }
 
 func (g *Game) init() {
@@ -162,15 +168,8 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 		return
 	}
 
-	fmt.Println(len(intersects))
+	if g.holding.name != "" {
 
-	//obj := intersects[0].Object
-	//fmt.Println(obj.Name())
-	//g.scene.Remove(obj)
-
-	for i, obj := range intersects {
-		o := obj.Object
-		fmt.Println(i, o.Name(), o.Position(), o.BoundingBox())
 	}
 }
 
