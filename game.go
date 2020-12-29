@@ -6,8 +6,11 @@ import (
 	"github.com/g3n/engine/camera"
 	"github.com/g3n/engine/core"
 	"github.com/g3n/engine/experimental/collision"
+	"github.com/g3n/engine/geometry"
 	"github.com/g3n/engine/gls"
+	"github.com/g3n/engine/graphic"
 	"github.com/g3n/engine/gui"
+	"github.com/g3n/engine/material"
 	"github.com/g3n/engine/math32"
 	"github.com/g3n/engine/renderer"
 	"github.com/g3n/engine/window"
@@ -34,6 +37,7 @@ type Game struct {
 	sqs       [][]Square
 	holding   Tower
 	holdmodel []*core.Node
+	validbox  *graphic.Mesh
 
 	// variables
 	lives     int
@@ -47,6 +51,10 @@ func (g *Game) init() {
 	g.rc = collision.NewRaycaster(&math32.Vector3{}, &math32.Vector3{})
 	g.rc.LinePrecision = 0.05
 	g.rc.PointPrecision = 0.05
+
+	g.validbox = graphic.NewMesh(geometry.NewBox(1, 0.1, 1),
+								 material.NewStandard(math32.NewColor("Green")))
+	g.scene.Add(g.validbox)
 }
 
 func (g *Game) loadLevel(path string) error {
@@ -170,11 +178,7 @@ func (g *Game) onCursor(evname string, ev interface{}) {
 
 	pos := intersects[0].Object.Parent().Position()
 
-	if g.holding.name != "" {
-		for i, n := range g.holdmodel {
-			n.SetPosition(pos.X, float32(i), pos.Z)
-		}
-	}
+	g.updateHolding(pos)
 }
 
 func (g *Game) onClick(evname string, ev interface{}) {

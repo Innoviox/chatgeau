@@ -1,6 +1,9 @@
 package main
 
-import "github.com/g3n/engine/core"
+import (
+	"github.com/g3n/engine/core"
+	"github.com/g3n/engine/math32"
+)
 
 type Tower struct {
 	speed float32
@@ -28,6 +31,16 @@ func (g *Game) buyTower(tower [4]string) core.Callback {
 
 			g.holdmodel = append(g.holdmodel, m)
 			g.scene.Add(m)
+		}
+	}
+}
+
+func (g *Game) updateHolding(pos math32.Vector3) {
+	if g.holding.name != "" {
+		g.validbox.SetPosition(pos.X, 0.1, pos.Z)
+
+		for i, n := range g.holdmodel {
+			n.SetPosition(pos.X, float32(i) + 0.1, pos.Z)
 		}
 	}
 }
