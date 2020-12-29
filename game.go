@@ -65,9 +65,10 @@ func (g *Game) loadLevel(path string) error {
 			m := loadModel(model.name)
 			m.SetPosition(float32(i), 0, float32(j))
 			m.SetRotation(0, model.roty, 0)
-			m.SetName(fmt.Sprintf("m %s %d %d", path, i, j))
+
+			m.SetName(fmt.Sprintf("m %s %d %d", model.name, i, j))
 			for k, c := range m.Children() {
-				c.SetName(fmt.Sprintf("%s %d %d %d", path, i, j, k))
+				c.SetName(fmt.Sprintf("%s %d %d %d", model.name, i, j, k))
 			}
 
 			g.scene.Add(m)

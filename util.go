@@ -47,46 +47,11 @@ func loadModel(path string) *core.Node {
 		return nil
 	}
 
-	//o := &dec.Objects[0]
-	//g, _ := dec.NewGeometry(o)
-	//m, _ := dec.NewMesh(o)
-	//fmt.Println(m.Materials()[0].IMaterial().GetMaterial().Side())
-	//m := graphic.NewMesh(g, nil)
-	//for i := 0; i < g.GroupCount(); i++) {
-	//	group := g.GroupAt(i)
-	//	name := o.Materials
-	//	mat := dec.Materials
-	//	var name string
-	//}
-
-	//mats := m.Materials()
-	//
-	//m1 := m.GetMaterial(30)
-	//m2 := m.GetMaterial(33)
-	//
-	//fmt.Println(mats)
-	//fmt.Println("\t", mats[0].IMaterial())
-	//fmt.Println("\t", mats[1].IMaterial())
-	//fmt.Println(m1)
-	//fmt.Println(m2)
-
-	//i := 0
-	//g.ReadFaces(func(vA, vB, vC math32.Vector3) bool {
-	//	//fmt.Println(vA, vB, vC)
-	//	fmt.Println(i, m.GetMaterial(i).GetMaterial())
-	//	i += 3
-	//	return false
-	//})
-
-	//return nil
-
 	group, err := dec.NewGroup()
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
-
-	group.SetName(path)
 
 	return group
 }
