@@ -55,5 +55,6 @@ func (g *Game) updateHolding(pos math32.Vector3) {
 }
 
 func (g *Game) placeTower(pos math32.Vector3) {
+	g.holding   = *new(Tower)
 	g.holdmodel = g.holdmodel[0:0]
 }

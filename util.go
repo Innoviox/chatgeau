@@ -92,8 +92,8 @@ func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
 		x =  2 * (mev.Xpos / float32(width)) - 1
 		y = -2 * (mev.Ypos / float32(height)) + 1
 	case *window.MouseEvent:
-		x =  2 * (mev.Xpos / float32(width)) - 1
-		y = -2 * (mev.Ypos / float32(height)) + 1
+		x =  2 * ((mev.Xpos / 2) / float32(width) ) - 1
+		y = -2 * ((mev.Ypos / 2) / float32(height)) + 1
 	}
 
 	g.rc.SetFromCamera(g.cam, x, y)
@@ -102,8 +102,6 @@ func (g *Game) getCurrentIntersect(ev interface{}) math32.Vector3 {
 	if len(intersects) == 0 {
 		return *math32.NewVector3(-1000, 0, 0)
 	}
-
-	fmt.Println("hi", intersects[0].Object.Name())
 
 	return intersects[0].Object.Parent().Position()
 }

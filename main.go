@@ -20,7 +20,7 @@ func main() {
 	gui.Manager().Set(scene)
 
 	cam := camera.New(1)
-	camera.NewOrbitControl(cam)
+	//camera.NewOrbitControl(cam)
 	scene.Add(cam)
 
 	// add lights
