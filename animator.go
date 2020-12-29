@@ -47,11 +47,11 @@ func (g *Game) animate(mesh *graphic.Mesh, kf, v math32.ArrayF32, callback func(
 	g.animator.add(&Animation{anim, callback, mesh})
 }
 
-func (g *Game) animateSingle(mesh *graphic.Mesh, from, to math32.Vector3, callback func()) {
+func (g *Game) animateSingle(mesh *graphic.Mesh, from, to math32.Vector3, callback func(), speed float32) {
 	kf := math32.NewArrayF32(0, 2)
 	v := math32.NewArrayF32(0, 6)
 
-	kf.Append(0, 1)
+	kf.Append(0, speed)
 	v.AppendVector3(&from, &to)
 
 	g.animate(mesh, kf, v, callback)
