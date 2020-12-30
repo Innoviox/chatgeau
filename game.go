@@ -40,6 +40,7 @@ type Game struct {
 	enemies   []*graphic.Mesh
 	bullets   []*graphic.Mesh
 	health    map[*graphic.Mesh]int
+	campos    *math32.Vector3
 
 
 	// variables
@@ -202,6 +203,17 @@ func (g *Game) updateCollisions(b *graphic.Mesh) {
 	g.enemies = enemies
 }
 
+func (g *Game) updateCamera() {
+	if g.campos == nil {
+		return
+	}
+
+	g.cam.SetPosition(g.campos.X, g.campos.Y, g.campos.Z)
+
+	tp := g.frontEnemy().Position()
+	g.cam.LookAt(&tp, &math32.Vector3{0, 1, 0})
+}
+
 func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	// clear
 	g.app.Gls().Clear(gls.DEPTH_BUFFER_BIT | gls.STENCIL_BUFFER_BIT | gls.COLOR_BUFFER_BIT)
@@ -216,6 +228,8 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
+
+	g.updateCamera()
 
 	//g.updateCollisions()
 

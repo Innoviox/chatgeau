@@ -118,6 +118,9 @@ func (g *Game) spawnBullet(t *TowerAnim) {
 	p := t.pos
 	bullet.SetPosition(p.X, t.height(), p.Z)
 
+	bp := bullet.Position()
+	g.campos = &bp
+
 	// todo target frontmost enemy
 	// todo range??
 	// todo enemy lives
