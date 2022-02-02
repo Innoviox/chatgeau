@@ -229,7 +229,7 @@ func (g *Game) Update(rend *renderer.Renderer, deltaTime time.Duration) {
 	g.spawner.update(deltaTime.Seconds(), g.spawnEnemy)
 	g.shooter.update(deltaTime.Seconds(), g.spawnBullet)
 
-	g.updateCamera()
+	//g.updateCamera()
 
 	//g.updateCollisions()
 
