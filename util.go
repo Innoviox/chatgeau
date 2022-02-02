@@ -121,9 +121,9 @@ func (g *Game) updateValid(radius float64) {
 	}
 
 	mat := material.NewStandard(math32.NewColor("Green"))
-	mat.SetOpacity(0.1)
+	mat.SetOpacity(1.0)
 
-	g.valid = graphic.NewMesh(geometry.NewCylinder(radius, 0.5, 100, 100, true, false), mat)
+	g.valid = graphic.NewMesh(geometry.NewCylinder(radius, 0.5, 100, 100, false, false), mat)
 	g.valid.SetVisible(false)
 	g.scene.Add(g.valid)
 }
