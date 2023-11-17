@@ -25,24 +25,24 @@ func (g *Game) setupGui() {
 	g.scene.Add(g.panel)
 
 	lives := gui.NewLabel(fmt.Sprintf("Lives: %d", g.lives))
-	lives.SetPosition(0, 0)
+	lives.SetPosition(10, 10)
 	lives.SetBorders(1, 1, 1, 1)
 	lives.SetFontSize(20)
 	lives.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
 	g.panel.Add(lives)
 
 	money := gui.NewLabel(fmt.Sprintf("Money: %d", g.money))
-	money.SetPosition(0, 30)
+	money.SetPosition(10, 40)
 	money.SetBorders(1, 1, 1, 1)
 	money.SetFontSize(20)
 	money.SetColor4(&math32.Color4{0.8, 0.8, 0.8, 1})
 	g.panel.Add(money)
 
-	y := float32(60)
+	y := float32(75)
 
 	for k, v := range towers {
 		btn := gui.NewButton(fmt.Sprintf("$%d - %s", v.cost, v.name))
-		btn.SetPosition(5, y)
+		btn.SetPosition(10, y)
 
 		btn.Subscribe(gui.OnClick, g.buyTower(k))
 

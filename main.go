@@ -21,26 +21,26 @@ func main() {
 	gui.Manager().Set(scene)
 
 	cam := camera.New(1)
-	//camera.NewOrbitControl(cam)
+	camera.NewOrbitControl(cam)
 	scene.Add(cam)
 
 	// add lights
-	l := light.NewDirectional(&math32.Color {1.0, 1.0, 1.0 }, 0.8)
+	l := light.NewDirectional(&math32.Color{1.0, 1.0, 1.0}, 0.8)
 	l.SetPosition(0, 1, 0)
 	scene.Add(l)
 	scene.Add(light.NewAmbient(&math32.Color{1.0, 1.0, 1.0}, 0.8))
 
 	// initialize game
-	g := Game {
-		app: application,
-		scene: scene,
-		cam: cam,
-		enemyAnimator: new(Animator),
+	g := Game{
+		app:            application,
+		scene:          scene,
+		cam:            cam,
+		enemyAnimator:  new(Animator),
 		bulletAnimator: new(Animator),
-		shooter: new(Shooter),
-		health: map[*graphic.Mesh]int{},
-		lives: 20,
-		money: 600,
+		shooter:        new(Shooter),
+		health:         map[*graphic.Mesh]int{},
+		lives:          20,
+		money:          600,
 	}
 	g.init()
 
